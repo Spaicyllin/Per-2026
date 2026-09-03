@@ -1161,7 +1161,7 @@ function vistaOrg(root){
   function guardar(msg){
     nota.className = 'estado'; nota.textContent = 'Guardando…';
     guardarEstado().then(function(){
-      nota.className = 'estado ok'; nota.textContent = '✓ ' + msg; render();
+      flash('✓ ' + msg); render();
     }, function(e){
       nota.className = 'estado err'; nota.textContent = 'No se pudo guardar: ' + errTexto(e);
     });
@@ -1297,8 +1297,7 @@ function vistaOrg(root){
       STATE.open.push(id);
       notaNuevo.className='estado'; notaNuevo.textContent='Guardando…';
       guardarEstado().then(function(){
-        notaNuevo.className='estado ok';
-        notaNuevo.textContent='✓ «' + nombre + '» creado con ' + courses.length + ' tiempos y abierto.';
+        flash('✓ «' + nombre + '» creado con ' + courses.length + ' tiempos y abierto. Ya lo ven todos.');
         CACHE = {}; render();
       }, function(e){
         notaNuevo.className='estado err'; notaNuevo.textContent='No se pudo guardar: ' + errTexto(e);
@@ -1357,6 +1356,10 @@ function render(){
            'ni guardar un pedido si se cae la señal. Ábrela en una pestaña normal del navegador: no dentro ' +
            'de un visor de archivos, ni en una ventana privada.'}));
   }
+  if(FLASH){
+    AVISOS.appendChild(h('div', {class:'aviso ' + FLASH.tipo, text:FLASH.msg}));
+    FLASH = null;
+  }
   if(!YO){
     PESTANAS.hidden = true;
     return vistaRegistro(APP);
@@ -1387,12 +1390,37 @@ Array.prototype.forEach.call(PESTANAS.querySelectorAll('button[data-tab]'), func
     if(t !== 'hoy') VISTA.menu = null;
     if(t !== 'pasadas') VISTA.pasada = null;
     render();
+    refrescarEstado();
   });
 });
 document.getElementById('btn-ajustes').addEventListener('click', function(){
   VISTA.pantalla = VISTA.pantalla ? null : 'ajustes';
   render();
 });
+
+var FLASH = null;
+// Un mensaje que sobrevive al render() que viene detras: render() limpia
+// #avisos, asi que la confirmacion se guarda aqui y se pinta al redibujar.
+function flash(msg, tipo){ FLASH = {msg:msg, tipo:tipo || 'pino'}; }
+
+var REFRESCANDO = false;
+// Vuelve a leer la configuracion de la nube, para que un menu nuevo o un
+// cambio de hora aparezca sin que nadie tenga que recargar. No refresca si
+// el usuario esta llenando un pedido o esta en el organizador: volver a
+// dibujar le borraria lo que llevaba escrito.
+function refrescarEstado(){
+  if(REFRESCANDO || !STATE) return;
+  if(VISTA.menu || VISTA.pantalla) return;
+  REFRESCANDO = true;
+  var antes = JSON.stringify(STATE);
+  cloudGet('state').then(function(s){
+    if(s && typeof s === 'object' && Number(s.seed) >= SEED){
+      s.open = s.open || []; s.closed = s.closed || [];
+      s.custom = s.custom || []; s.meta = s.meta || {};
+      if(JSON.stringify(s) !== antes){ STATE = s; CACHE = {}; render(); }
+    }
+  }, function(){}).then(function(){ REFRESCANDO = false; });
+}
 
 // Cuenta regresiva: solo cambia el texto de los chips, cada 20 s.
 function tictac(){
@@ -1404,10 +1432,15 @@ function tictac(){
   });
 }
 setInterval(tictac, 20000);
+var VUELTAS = 0;
+setInterval(function(){
+  VUELTAS++;
+  if(!document.hidden && VUELTAS % 3 === 0) refrescarEstado();
+}, 20000);
 
 // Al volver del segundo plano, refresca por si ya cerró.
 document.addEventListener('visibilitychange', function(){
-  if(!document.hidden && STATE){ tictac(); }
+  if(!document.hidden && STATE){ tictac(); refrescarEstado(); }
 });
 
 cargarEstado().then(function(){
