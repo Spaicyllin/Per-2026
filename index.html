@@ -499,11 +499,24 @@ function chipCierre(cms){
 function clavePedido(menuId, personaId){ return 'r_' + limpiaClave(menuId) + '__' + limpiaClave(personaId); }
 function nuevoPersonaId(nombre){ return slug(nombre) + '-' + rand4(); }
 
+// Si alguien entró dos veces (otro teléfono, datos borrados) quedó con dos
+// identidades y dos pedidos. Nos quedamos con el más reciente de cada persona.
+function unPedidoPorPersona(lista){
+  var porNombre = {}, orden = [];
+  lista.forEach(function(pedido){
+    var k = slug(pedido.name), previo = porNombre[k];
+    if(!previo){ orden.push(k); porNombre[k] = pedido; return; }
+    if(String(pedido.at || '') > String(previo.at || '')) porNombre[k] = pedido;
+  });
+  return orden.map(function(k){ return porNombre[k]; });
+}
+
 function pedidosDe(menuId, forzar){
   var pre = 'r_' + limpiaClave(menuId) + '__';
   if(!forzar && CACHE[pre]) return Promise.resolve(CACHE[pre]);
   return cloudList(pre).then(function(rows){
     var out = rows.map(function(r){ return r.value; }).filter(function(v){ return v && v.name; });
+    out = unPedidoPorPersona(out);
     out.sort(function(a,b){ return slug(a.name) < slug(b.name) ? -1 : 1; });
     CACHE[pre] = out;
     return out;
@@ -565,13 +578,24 @@ function vistaRegistro(root){
   }}, 'No estoy en la lista'));
 }
 function entrar(nombre){
-  YO = { id: nuevoPersonaId(nombre), name: nombre };
-  LS.set('mesa_me', YO);
-  cloudSet('p_' + limpiaClave(YO.id), { id:YO.id, name:nombre, at:new Date().toISOString() })
-    .catch(function(){ LS.set('pend_p_' + limpiaClave(YO.id),
-      { key:'p_' + limpiaClave(YO.id), value:{ id:YO.id, name:nombre, at:new Date().toISOString() } }); });
-  VISTA = { tab:'hoy', menu:null, grupo:null, pantalla:null, pasada:null };
-  render();
+  APP.textContent = '';
+  APP.appendChild(h('div', {class:'cargando', text:'Entrando…'}));
+  // Si esta persona ya se registró antes reusamos su id, para que no le queden
+  // dos pedidos en la misma comida.
+  registrados_completos().then(function(gente){
+    var hallado = gente.filter(function(g){ return slug(g.name) === slug(nombre); })[0];
+    return hallado ? hallado.id : nuevoPersonaId(nombre);
+  }, function(){ return nuevoPersonaId(nombre); }).then(function(pid){
+    YO = { id: pid, name: nombre };
+    LS.set('mesa_me', YO);
+    var ficha = { id:pid, name:nombre, at:new Date().toISOString() };
+    cloudSet('p_' + limpiaClave(pid), ficha)
+      .catch(function(){ LS.set('pend_p_' + limpiaClave(pid),
+        { key:'p_' + limpiaClave(pid), value:ficha }); });
+    VISTA = { tab:'hoy', menu:null, grupo:null, pantalla:null, pasada:null };
+    CACHE = {};
+    render();
+  });
 }
 
 /* =========================================================
@@ -841,10 +865,28 @@ function resumenTexto(m, pedidos, falta){
   }
   return L.join('\n');
 }
-function descargarCSV(m, pedidos, falta){
+function csvTexto(m, pedidos, falta){
   var cols = ['Nombre'].concat(m.courses.map(function(c){ return c.name; })).concat(['Observaciones']);
   function esc(v){ return '"' + String(v==null?'':v).replace(/"/g,'""') + '"'; }
-  var filas = [cols.map(esc).join(',')];
+  var meta = metaDe(m.id);
+  var nObs = pedidos.filter(function(p){ return p.note; }).length;
+  var filas = [];
+  // El resumen primero, para leerlo de una al abrir el archivo.
+  filas.push([esc('La mesa · ' + m.name)].join(','));
+  if(meta.when)  filas.push(esc(meta.when));
+  if(meta.place) filas.push(esc(meta.place));
+  filas.push([esc(pedidos.length + ' pedidos'), esc(nObs + ' con observaciones'),
+              esc('faltan ' + falta.length), esc('de ' + TOTAL_GRUPO)].join(','));
+  filas.push('');
+  filas.push(esc('RESUMEN'));
+  conteoPorTiempo(m, pedidos).forEach(function(r){
+    filas.push([esc(r.tiempo)].concat(r.partes.length
+      ? r.partes.map(function(x){ return esc(x.cuantos + ' ' + x.nombre); })
+      : [esc('nadie')]).join(','));
+  });
+  filas.push('');
+  filas.push(esc('DETALLE'));
+  filas.push(cols.map(esc).join(','));
   pedidos.forEach(function(p){
     filas.push([esc(p.name)]
       .concat(m.courses.map(function(c){ return esc((p.picks && p.picks[c.name]) || ''); }))
@@ -855,7 +897,10 @@ function descargarCSV(m, pedidos, falta){
       .concat(m.courses.map(function(){ return esc('SIN PEDIR'); }))
       .concat([esc('')]).join(','));
   });
-  var blob = new Blob(['﻿' + filas.join('\r\n')], {type:'text/csv;charset=utf-8'});
+  return filas.join('\r\n');
+}
+function descargarCSV(m, pedidos, falta){
+  var blob = new Blob(['﻿' + csvTexto(m, pedidos, falta)], {type:'text/csv;charset=utf-8'});
   var a = h('a', {href:URL.createObjectURL(blob), download:'la-mesa-' + m.id + '.csv'});
   document.body.appendChild(a); a.click();
   setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
