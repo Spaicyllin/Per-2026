@@ -328,6 +328,8 @@ function rand4(){
   for(i=0;i<4;i++) o += a.charAt(Math.floor(Math.random()*a.length));
   return o;
 }
+// El marcador sin reemplazar empieza por guion bajo; una clave anon real no.
+function sinClave(){ return !SB_KEY || SB_KEY.charAt(0) === '_' || SB_KEY.length < 40; }
 function limpiaClave(s){ return String(s||'').replace(/[^A-Za-z0-9_-]/g,''); }
 function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 function unicos(a){ var s={}, o=[], i; for(i=0;i<a.length;i++){ if(!s[a[i]]){ s[a[i]]=1; o.push(a[i]); } } return o; }
@@ -1082,7 +1084,7 @@ function vistaDiagnostico(root){
 
   var L = [];
   L.push('URL nube: ' + SB_URL);
-  L.push('Clave: ' + (SB_KEY.indexOf('__SUPABASE') === 0 ? '⚠ SIN CONFIGURAR' : 'configurada (' + SB_KEY.length + ' car.)'));
+  L.push('Clave: ' + (sinClave() ? '⚠ SIN CONFIGURAR' : 'configurada (' + SB_KEY.length + ' car.)'));
   L.push('Yo: ' + (YO ? YO.name + ' [' + YO.id + ']' : 'sin registrar'));
   L.push('Hora del teléfono: ' + new Date().toString());
   L.push('Pendientes por subir: ' + LS.keys().filter(function(k){ return k.indexOf('pend_') === 0; }).length);
@@ -1334,7 +1336,7 @@ var PESTANAS = document.getElementById('pestanas');
 
 function render(){
   if(!STATE){ return; }
-  var falta = SB_KEY.indexOf('__SUPABASE') === 0;
+  var falta = sinClave();
   APP.textContent = '';
 
   if(falta){
