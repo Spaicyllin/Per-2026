@@ -1,0 +1,1408 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F2E7D3">
+<title>La mesa · Perú 2026</title>
+<style>
+:root{
+  --lino:#F2E7D3; --tarjeta:#FBF6EA; --azul:#1E3A5C; --carmin:#98252B;
+  --pino:#3A5C42; --oro:#C08A1E; --tinta:#241C14;
+  --linea:rgba(36,28,20,.16);
+  --titulo:Georgia,"Times New Roman",serif;
+  --cuerpo:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--lino); color:var(--tinta); font-family:var(--cuerpo);
+  font-size:16px; line-height:1.45; padding-bottom:96px;
+  -webkit-text-size-adjust:100%;
+}
+.marco{max-width:560px;margin:0 auto;padding:0 14px}
+h1,h2,h3,h4{font-family:var(--titulo);margin:0;line-height:1.2}
+p{margin:.4em 0}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+svg.cenefa{display:block;width:100%;height:12px}
+
+/* ---------- encabezado ---------- */
+header.top{padding:12px 0 10px}
+.marca{display:flex;align-items:center;gap:10px}
+.marca .sello{flex:0 0 34px;width:34px;height:34px}
+.marca h1{font-size:27px;color:var(--azul);letter-spacing:.2px}
+.marca .sub{font-size:12.5px;color:var(--pino);letter-spacing:.14em;text-transform:uppercase;margin-top:1px}
+.engranaje{
+  margin-left:auto;background:var(--tarjeta);border:1px solid var(--linea);
+  border-radius:11px;width:42px;height:42px;display:grid;place-items:center;padding:0;
+}
+.engranaje svg{width:21px;height:21px;display:block}
+
+/* ---------- tarjetas ---------- */
+.tarjeta{
+  background:var(--tarjeta);border:1px solid var(--linea);border-radius:14px;
+  padding:14px;margin:12px 0;box-shadow:0 1px 0 rgba(36,28,20,.05);
+}
+.tarjeta.pulsable{width:100%;text-align:left;display:block}
+.tarjeta h3{font-size:19px;color:var(--azul)}
+.meta{font-size:13.5px;color:rgba(36,28,20,.72);margin-top:3px}
+.muted{color:rgba(36,28,20,.6);font-size:14px}
+.chip{
+  display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;
+  border:1px solid currentColor;letter-spacing:.02em;
+}
+.chip.ok{color:var(--pino)}
+.chip.no{color:var(--carmin)}
+.chip.reloj{color:var(--oro);border-color:rgba(192,138,30,.55);background:rgba(192,138,30,.1)}
+.hilo{height:1px;background:var(--linea);border:0;margin:12px 0}
+.aviso{
+  background:rgba(152,37,43,.08);border:1px solid rgba(152,37,43,.35);
+  border-radius:12px;padding:11px 13px;margin:12px 0;font-size:14px;color:var(--carmin)
+}
+.aviso.oro{background:rgba(192,138,30,.12);border-color:rgba(192,138,30,.45);color:#7a5711}
+.aviso.pino{background:rgba(58,92,66,.1);border-color:rgba(58,92,66,.4);color:var(--pino)}
+
+/* ---------- botones ---------- */
+.btn{
+  display:block;width:100%;padding:14px;border-radius:12px;border:1px solid var(--azul);
+  background:var(--azul);color:#FBF6EA;font-weight:650;font-size:16.5px;margin-top:10px;
+}
+.btn:disabled{opacity:.45}
+.btn.sec{background:transparent;color:var(--azul)}
+.btn.carmin{background:var(--carmin);border-color:var(--carmin);color:#FBF6EA}
+.btn.chico{padding:10px;font-size:14.5px;font-weight:600}
+.fila{display:flex;gap:8px}
+.fila>*{flex:1;margin-top:10px}
+
+/* ---------- registro ---------- */
+input[type=search],input[type=text],input[type=password],input[type=datetime-local],select,textarea{
+  width:100%;padding:12px;font-family:inherit;font-size:16px;color:var(--tinta);
+  background:#fff;border:1px solid var(--linea);border-radius:11px;
+}
+textarea{min-height:76px;resize:vertical}
+label.campo{display:block;font-size:13px;font-weight:650;color:var(--azul);margin:12px 0 5px}
+.lista{margin-top:10px;max-height:52vh;overflow:auto;-webkit-overflow-scrolling:touch}
+button.nombre{
+  display:block;width:100%;text-align:left;padding:13px 14px;margin-bottom:7px;
+  background:var(--tarjeta);border:1px solid var(--linea);border-radius:11px;
+  font-size:16px;color:var(--tinta);
+}
+
+/* ---------- menú / opciones ---------- */
+.tiempo{margin:18px 0 0}
+.tiempo .cab{display:flex;align-items:baseline;gap:8px}
+.tiempo .num{
+  flex:0 0 24px;width:24px;height:24px;border-radius:7px;background:var(--azul);color:#FBF6EA;
+  font-size:13px;font-weight:700;display:grid;place-items:center;font-family:var(--cuerpo)
+}
+.tiempo h4{font-size:16.5px;color:var(--azul)}
+.tiempo .regla{font-size:12px;color:rgba(36,28,20,.6);margin:4px 0 8px 32px}
+button.opcion{
+  display:block;width:100%;text-align:left;padding:13px 14px;margin-bottom:8px;
+  background:var(--tarjeta);border:1.5px solid var(--linea);border-radius:12px;color:var(--tinta);
+}
+button.opcion .n{display:block;font-weight:650;font-size:15.5px}
+button.opcion .d{display:block;font-size:13px;color:rgba(36,28,20,.65);margin-top:2px}
+button.opcion[aria-pressed=true]{
+  border-color:var(--pino);background:rgba(58,92,66,.12);box-shadow:inset 0 0 0 1px rgba(58,92,66,.4)
+}
+button.opcion[aria-pressed=true] .n::before{content:"✓ ";color:var(--pino);font-weight:700}
+.estado{font-size:13.5px;margin:14px 0 0;min-height:20px}
+.estado.err{color:var(--carmin)}
+.estado.ok{color:var(--pino)}
+
+/* ---------- grupo ---------- */
+.selector button{
+  display:block;width:100%;text-align:left;padding:12px 13px;margin-bottom:8px;
+  background:var(--tarjeta);border:1.5px solid var(--linea);border-radius:11px;color:var(--tinta);font-size:15px
+}
+.selector button[aria-pressed=true]{border-color:var(--azul);background:rgba(30,58,92,.1);font-weight:650}
+.conteo{margin:11px 0 0}
+.conteo .lbl{display:flex;justify-content:space-between;gap:10px;font-size:14.5px}
+.conteo .lbl b{font-variant-numeric:tabular-nums}
+.barra{height:8px;border-radius:5px;background:rgba(36,28,20,.1);margin:5px 0 4px;overflow:hidden}
+.barra i{display:block;height:100%;background:var(--azul);border-radius:5px}
+.quienes{font-size:12.5px;color:rgba(36,28,20,.66)}
+.grande{font-size:22px;font-family:var(--titulo);color:var(--azul)}
+ol.unoauno{padding-left:22px;margin:8px 0 0}
+ol.unoauno li{margin-bottom:11px;font-size:14.5px}
+ol.unoauno .t{color:rgba(36,28,20,.72);font-size:13.5px}
+ol.unoauno .obs{color:var(--carmin);font-size:13px}
+.caja{background:rgba(152,37,43,.06);border:1px dashed rgba(152,37,43,.4);border-radius:12px;padding:11px 13px;margin-top:12px}
+.caja h4{color:var(--carmin);font-size:15px}
+.caja p{font-size:13.5px;color:rgba(36,28,20,.78)}
+
+/* ---------- pestañas ---------- */
+nav.pestanas{
+  position:fixed;left:0;right:0;bottom:0;background:var(--lino);
+  box-shadow:0 -6px 18px rgba(36,28,20,.08);padding-bottom:env(safe-area-inset-bottom)
+}
+nav.pestanas .tres{max-width:560px;margin:0 auto;display:flex}
+nav.pestanas button{
+  flex:1;background:none;border:0;padding:11px 4px 13px;color:rgba(36,28,20,.55);
+  font-size:12.5px;font-weight:600;display:grid;gap:3px;justify-items:center
+}
+nav.pestanas button svg{width:22px;height:22px;display:block}
+nav.pestanas button[aria-current=page]{color:var(--azul)}
+nav.pestanas button[aria-current=page] .pt{font-weight:750}
+pre.diag{
+  background:#fff;border:1px solid var(--linea);border-radius:11px;padding:11px;
+  font-size:12px;line-height:1.5;overflow:auto;white-space:pre-wrap;word-break:break-word
+}
+.volver{
+  background:none;border:0;padding:10px 0;color:var(--azul);font-size:14.5px;font-weight:650
+}
+.cargando{text-align:center;color:rgba(36,28,20,.55);padding:26px 0;font-size:14.5px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <pattern id="rombos" width="48" height="12" patternUnits="userSpaceOnUse">
+    <rect width="48" height="12" fill="#F2E7D3"/>
+    <polygon points="0,6 6,0 12,6 6,12" fill="#1E3A5C"/>
+    <polygon points="12,6 18,0 24,6 18,12" fill="#98252B"/>
+    <polygon points="24,6 30,0 36,6 30,12" fill="#C08A1E"/>
+    <polygon points="36,6 42,0 48,6 42,12" fill="#3A5C42"/>
+    <polygon points="6,6 12,0 18,6 12,12" fill="#F2E7D3" opacity=".55"/>
+    <polygon points="18,6 24,0 30,6 24,12" fill="#F2E7D3" opacity=".55"/>
+    <polygon points="30,6 36,0 42,6 36,12" fill="#F2E7D3" opacity=".55"/>
+  </pattern>
+</defs></svg>
+
+<svg class="cenefa" viewBox="0 0 96 12" preserveAspectRatio="none" aria-hidden="true"><rect width="96" height="12" fill="url(#rombos)"/></svg>
+
+<div class="marco">
+  <header class="top">
+    <div class="marca">
+      <svg class="sello" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 0H16V4H20V8H24V16H20V20H16V24H8V20H4V16H0V8H4V4H8Z M10 10H14V14H10Z"
+              fill="#C08A1E" fill-rule="evenodd"/>
+      </svg>
+      <div>
+        <h1>La mesa</h1>
+        <div class="sub">Perú 2026</div>
+      </div>
+      <button class="engranaje" id="btn-ajustes" aria-label="Ajustes">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1E3A5C" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="12" cy="12" r="3.2"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+  <main id="app"><div class="cargando">Poniendo la mesa…</div></main>
+</div>
+
+<nav class="pestanas" id="pestanas" hidden>
+  <svg class="cenefa" viewBox="0 0 96 12" preserveAspectRatio="none" aria-hidden="true"><rect width="96" height="12" fill="url(#rombos)"/></svg>
+  <div class="tres">
+    <button data-tab="hoy" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M4 8h16M6 8V5M18 8V5M4 8v11h16V8"/><path d="M8 12h8M8 16h5"/>
+      </svg><span class="pt">Hoy</span>
+    </button>
+    <button data-tab="grupo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/>
+        <circle cx="17.5" cy="9.5" r="2.4"/><path d="M17.5 14c2.4 0 4.5 1.4 4.5 4"/>
+      </svg><span class="pt">El grupo</span>
+    </button>
+    <button data-tab="pasadas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>
+      </svg><span class="pt">Pasadas</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+'use strict';
+
+/* =========================================================
+   1. CONFIGURACIÓN
+   ========================================================= */
+var SB_URL = 'https://bylwleqgxonnnjynhqol.supabase.co';
+var SB_KEY = '__SUPABASE_KEY__';
+var SEED = 3;
+var TOTAL_GRUPO = 29;
+var CLAVE_ORG = 'pisco';
+var TIMEOUT = 12000;
+
+var PEOPLE = [
+  'Alvaro Marimon','Ana Ramirez','Andres Olaya','Carla Rago','Carolina Zapata',
+  'Catalina Velasquez','Daniel Espinosa','David Arocha','Gisella GT','Isabel Ramirez',
+  'Jennifer Posada','Jhoan','Jose Manual Penagos','Julian Cardona','Katherine Espinoza Polo',
+  'Laura Giraldo','Lila Bertel','Lina Marulanda','Lizeth Jaramillo','Lorena Lopez',
+  'Luis Daniel Monsalve','Luis Mario Diaz','Luz María Correa','Manuela Arias','Natalia Ruiz',
+  'Paola Andrea','Paola Bastidas','Sebastian Monroy P','Uber Marin'
+];
+
+var MENUS_FIJOS = [
+  {
+    id:'parquetito-turistico', name:'Menú turístico', place:'El Parquetito', incluye:'',
+    courses:[
+      {name:'Entrada', options:[
+        {n:'Crema de espárrago o champiñones'},
+        {n:'Palta a la jardinera'},
+        {n:'Papa a la huancaína'},
+        {n:'Ensalada mixta', d:'Vegetales'}
+      ]},
+      {name:'Plato de fondo', options:[
+        {n:'Ají de gallina'},
+        {n:'Lomo saltado a la criolla'},
+        {n:'Filete de pollo a la plancha', d:'Con arroz y papas doradas'}
+      ]},
+      {name:'Postre', options:[{n:'Helado'}]}
+    ]
+  },
+  {
+    id:'almuerzo-cena-3tiempos', name:'Almuerzo & cena', place:'Restaurante por confirmar',
+    incluye:'Incluido para todos: 1 pisco sour de aperitivo',
+    courses:[
+      {name:'Entrada', options:[
+        {n:'Ceviche carretillero', d:'Pesca del día, leche de tigre, choclo, camote, chicharrón'},
+        {n:'Causa popular', d:'Langostinos, palta, huevo, salsa golf'},
+        {n:'Ocopa & huancaína', d:'Ají amarillo, queso fresco, huacatay, papa nativa'},
+        {n:'Ceviche de champiñones', d:'Leche de tigre, ají amarillo, choclo, camote, chicharrón'},
+        {n:'Carpaccio de lomo', d:'Vinagreta andina, berros, tostas'}
+      ]},
+      {name:'Plato de fondo', options:[
+        {n:'Arroz con mariscos', d:'Mariscos al wok, criolla'},
+        {n:'Ají de gallina', d:'Papa amarilla crocante, huevo, aceituna, arroz blanco'},
+        {n:'Arroz tapado', d:'Asado de tira, huevo, pasas, plátano, bizcocho, papas al hilo'},
+        {n:'Chaufa quinoa', d:'Quinoa blanca y negra, espárragos, champiñones, pimiento, holantao, frejol chino, pachicay'}
+      ]},
+      {name:'Postre', options:[
+        {n:'Suspiro a la limeña', d:'Manjar, merengue oporto'},
+        {n:'Tres leches', d:'Bizcochuelo, vainilla, canela'},
+        {n:'Ensalada de frutas', d:'Frutas de la estación'}
+      ]},
+      {name:'Bebida fría', options:[{n:'Chicha morada'},{n:'Limonada'}]},
+      {name:'Bebida caliente', options:[{n:'Café americano'},{n:'Infusión'}]}
+    ]
+  }
+];
+
+var SEMILLA = {
+  seed: SEED,
+  open: ['parquetito-turistico','almuerzo-cena-3tiempos'],
+  closed: [],
+  custom: [],
+  meta: {
+    'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:'2026-09-03T16:00'},
+    'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:'2026-09-03T16:00'}
+  }
+};
+
+/* =========================================================
+   2. UTILIDADES
+   ========================================================= */
+function h(tag, props, kids){
+  var n = document.createElement(tag), k, v, i, c;
+  if(props) for(k in props){
+    v = props[k];
+    if(v===null || v===undefined || v===false) continue;
+    if(k==='class') n.className = v;
+    else if(k==='text') n.textContent = v;
+    else if(k==='html') n.innerHTML = v;
+    else if(k.slice(0,2)==='on') n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v===true ? '' : v);
+  }
+  if(kids){
+    kids = [].concat(kids);
+    for(i=0;i<kids.length;i++){
+      c = kids[i];
+      if(c===null || c===undefined || c===false || c==='') continue;
+      n.appendChild(typeof c==='object' ? c : document.createTextNode(String(c)));
+    }
+  }
+  return n;
+}
+function slug(s){
+  return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || 'x';
+}
+function rand4(){
+  var a='abcdefghijkmnpqrstuvwxyz23456789', o='', i;
+  for(i=0;i<4;i++) o += a.charAt(Math.floor(Math.random()*a.length));
+  return o;
+}
+function limpiaClave(s){ return String(s||'').replace(/[^A-Za-z0-9_-]/g,''); }
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function unicos(a){ var s={}, o=[], i; for(i=0;i<a.length;i++){ if(!s[a[i]]){ s[a[i]]=1; o.push(a[i]); } } return o; }
+function errTexto(e){
+  var m = (e && e.message) ? e.message : String(e);
+  if(/abort/i.test(m)) return 'la nube no respondió en 12 segundos';
+  if(/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'sin conexión con la nube';
+  return m;
+}
+
+/* =========================================================
+   3. NUBE (Supabase REST) Y TELÉFONO (localStorage)
+   ========================================================= */
+function sbFetch(path, opts){
+  opts = opts || {};
+  var ctl = new AbortController();
+  var t = setTimeout(function(){ ctl.abort(); }, TIMEOUT);
+  var headers = {
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Content-Type': 'application/json'
+  };
+  if(opts.headers) for(var k in opts.headers) headers[k] = opts.headers[k];
+  return fetch(SB_URL + '/rest/v1' + path, {
+    method: opts.method || 'GET', headers: headers, body: opts.body,
+    signal: ctl.signal, cache: 'no-store'
+  }).then(function(r){
+    if(!r.ok){
+      return r.text().catch(function(){ return ''; }).then(function(d){
+        throw new Error('HTTP ' + r.status + (d ? ' — ' + d.slice(0,180) : ''));
+      });
+    }
+    if(opts.raw) return true;
+    return r.text().then(function(txt){ return txt ? JSON.parse(txt) : null; });
+  }).then(function(v){ clearTimeout(t); return v; },
+          function(e){ clearTimeout(t); throw e; });
+}
+function cloudGet(key){
+  return sbFetch('/mesa?select=value&key=eq.' + encodeURIComponent(key)).then(function(rows){
+    return (rows && rows[0]) ? rows[0].value : null;
+  });
+}
+function cloudList(prefix){
+  return sbFetch('/mesa?select=key,value&key=like.' + encodeURIComponent(prefix + '*')).then(function(rows){
+    return (rows || []).filter(function(r){ return String(r.key).indexOf(prefix) === 0; });
+  });
+}
+function cloudSet(key, value){
+  var intento = 0, ultimo = null;
+  function ir(){
+    intento++;
+    return sbFetch('/mesa?on_conflict=key', {
+      method:'POST',
+      headers:{ 'Prefer':'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify([{ key:key, value:value, updated_at:new Date().toISOString() }]),
+      raw:true
+    }).catch(function(e){
+      ultimo = e;
+      if(intento >= 3) throw ultimo;
+      return sleep(400 * intento).then(ir);
+    });
+  }
+  return ir();
+}
+function cloudDel(key){
+  return sbFetch('/mesa?key=eq.' + encodeURIComponent(key), { method:'DELETE', raw:true });
+}
+
+var LS = {
+  get:function(k, d){ try{ var v=localStorage.getItem(k); return v==null?d:JSON.parse(v); }catch(e){ return d; } },
+  set:function(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del:function(k){ try{ localStorage.removeItem(k); }catch(e){} },
+  keys:function(){ try{ return Object.keys(localStorage); }catch(e){ return []; } }
+};
+
+/* =========================================================
+   4. ESTADO
+   ========================================================= */
+var STATE = null;
+var YO = LS.get('mesa_me', null);
+var ORG = LS.get('mesa_org', false) === true;
+var VISTA = { tab:'hoy', menu:null, grupo:null, pantalla:null, pasada:null };
+var CACHE = {};
+
+function cargarEstado(){
+  var leyoBien = true;
+  return cloudGet('state').catch(function(){ leyoBien = false; return null; }).then(function(s){
+    if(!s || typeof s !== 'object') s = null;
+    var necesitaSemilla = !s || !(Number(s.seed) >= SEED);
+    if(necesitaSemilla){
+      var nueva = JSON.parse(JSON.stringify(SEMILLA));
+      STATE = nueva;
+      // Solo escribimos si la lectura funcionó: si la nube falló no pisamos nada.
+      if(leyoBien) return cloudSet('state', nueva).catch(function(){}).then(function(){ return STATE; });
+      return STATE;
+    }
+    s.open = s.open || []; s.closed = s.closed || [];
+    s.custom = s.custom || []; s.meta = s.meta || {};
+    STATE = s;
+    return STATE;
+  });
+}
+function guardarEstado(){ return cloudSet('state', STATE); }
+
+function todosLosMenus(){ return MENUS_FIJOS.concat(STATE ? STATE.custom : []); }
+function menuPorId(id){
+  var t = todosLosMenus(), i;
+  for(i=0;i<t.length;i++) if(t[i].id === id) return t[i];
+  return null;
+}
+function metaDe(id){
+  var m = (STATE && STATE.meta && STATE.meta[id]) || {};
+  var base = menuPorId(id) || {};
+  return { when: m.when || '', place: m.place || base.place || '', close: m.close || '' };
+}
+function cierreMs(id){
+  var c = metaDe(id).close;
+  if(!c) return null;
+  var d = new Date(c);
+  return isNaN(d.getTime()) ? null : d.getTime();
+}
+function vencido(id){ var c = cierreMs(id); return c !== null && Date.now() > c; }
+function estaViva(id){ return STATE.open.indexOf(id) >= 0 && !vencido(id); }
+function esPasada(id){
+  var conocida = STATE.open.indexOf(id) >= 0 || STATE.closed.indexOf(id) >= 0;
+  return conocida && (STATE.closed.indexOf(id) >= 0 || vencido(id));
+}
+function menusVivos(){
+  return STATE.open.filter(estaViva).map(menuPorId).filter(Boolean).sort(function(a,b){
+    var ca = cierreMs(a.id), cb = cierreMs(b.id);
+    if(ca === null) return 1; if(cb === null) return -1;
+    return ca - cb;
+  });
+}
+function menusPasados(){
+  return unicos(STATE.open.concat(STATE.closed)).filter(esPasada).map(menuPorId).filter(Boolean).sort(function(a,b){
+    return (cierreMs(b.id) || 0) - (cierreMs(a.id) || 0);
+  });
+}
+function textoCuenta(ms){
+  if(ms === null) return '';
+  var d = ms - Date.now();
+  if(d <= 0) return 'cerrado';
+  var min = Math.floor(d/60000), hh = Math.floor(min/60), dd = Math.floor(hh/24);
+  if(dd >= 1) return 'cierra en ' + dd + ' d ' + (hh%24) + ' h';
+  if(hh >= 1) return 'cierra en ' + hh + ' h ' + (min%60) + ' min';
+  return 'cierra en ' + min + ' min';
+}
+function clavePedido(menuId, personaId){ return 'r_' + limpiaClave(menuId) + '__' + limpiaClave(personaId); }
+function nuevoPersonaId(nombre){ return slug(nombre) + '-' + rand4(); }
+
+function pedidosDe(menuId, forzar){
+  var pre = 'r_' + limpiaClave(menuId) + '__';
+  if(!forzar && CACHE[pre]) return Promise.resolve(CACHE[pre]);
+  return cloudList(pre).then(function(rows){
+    var out = rows.map(function(r){ return r.value; }).filter(function(v){ return v && v.name; });
+    out.sort(function(a,b){ return slug(a.name) < slug(b.name) ? -1 : 1; });
+    CACHE[pre] = out;
+    return out;
+  });
+}
+function miPedido(menuId){
+  if(!YO) return Promise.resolve(null);
+  return cloudGet(clavePedido(menuId, YO.id)).catch(function(){
+    var p = LS.get('pend_' + clavePedido(menuId, YO.id), null);
+    return p ? p.value : null;
+  });
+}
+function subirPendientes(){
+  var ks = LS.keys().filter(function(k){ return k.indexOf('pend_') === 0; });
+  return ks.reduce(function(p, k){
+    return p.then(function(){
+      var rec = LS.get(k, null);
+      if(!rec || !rec.key){ LS.del(k); return; }
+      return cloudSet(rec.key, rec.value).then(function(){ LS.del(k); }, function(){});
+    });
+  }, Promise.resolve());
+}
+
+/* =========================================================
+   5. VISTA: REGISTRO
+   ========================================================= */
+function vistaRegistro(root){
+  root.textContent = '';
+  root.appendChild(h('h2', {text:'Busca tu nombre', style:'font-size:21px;color:#1E3A5C'}));
+  root.appendChild(h('p', {class:'muted', text:'Solo una vez en este teléfono. Después entras directo.'}));
+
+  // El campo NO se redibuja al escribir: solo se repinta la lista de abajo.
+  var input = h('input', {type:'search', placeholder:'Busca tu nombre…', autocomplete:'off',
+                          autocapitalize:'words', 'aria-label':'Busca tu nombre'});
+  var lista = h('div', {class:'lista'});
+  function pintar(){
+    var q = slug(input.value), i;
+    lista.textContent = '';
+    var items = PEOPLE.filter(function(n){ return !q || q==='x' || slug(n).indexOf(q) >= 0; });
+    if(!items.length){
+      lista.appendChild(h('p', {class:'muted', text:'Ningún nombre coincide. Usa «No estoy en la lista».'}));
+      return;
+    }
+    for(i=0;i<items.length;i++){
+      (function(n){
+        lista.appendChild(h('button', {class:'nombre', onclick:function(){ entrar(n); }}, n));
+      })(items[i]);
+    }
+  }
+  input.addEventListener('input', pintar);
+  root.appendChild(h('div', {style:'margin-top:14px'}, [input]));
+  root.appendChild(lista);
+  pintar();
+
+  root.appendChild(h('hr', {class:'hilo'}));
+  root.appendChild(h('button', {class:'btn sec', onclick:function(){
+    var n = prompt('Escribe tu nombre completo:');
+    if(n && n.trim()) entrar(n.trim());
+  }}, 'No estoy en la lista'));
+}
+function entrar(nombre){
+  YO = { id: nuevoPersonaId(nombre), name: nombre };
+  LS.set('mesa_me', YO);
+  cloudSet('p_' + limpiaClave(YO.id), { id:YO.id, name:nombre, at:new Date().toISOString() })
+    .catch(function(){ LS.set('pend_p_' + limpiaClave(YO.id),
+      { key:'p_' + limpiaClave(YO.id), value:{ id:YO.id, name:nombre, at:new Date().toISOString() } }); });
+  VISTA = { tab:'hoy', menu:null, grupo:null, pantalla:null, pasada:null };
+  render();
+}
+
+/* =========================================================
+   6. VISTA: HOY
+   ========================================================= */
+function vistaHoy(root){
+  var vivos = menusVivos();
+  root.textContent = '';
+
+  if(!vivos.length){
+    root.appendChild(h('div', {class:'tarjeta'}, [
+      h('h3', {text:'No hay comidas abiertas'}),
+      h('p', {class:'muted', text:'Cuando se abra el siguiente menú aparece aquí. Si ya pediste, míralo en «Pasadas».'})
+    ]));
+    return;
+  }
+  // Si hay una sola comida abierta, entra directo al menú.
+  if(vivos.length === 1 && !VISTA.menu){ VISTA.menu = vivos[0].id; }
+  if(VISTA.menu && estaViva(VISTA.menu)){ return vistaMenu(root, VISTA.menu, vivos.length > 1); }
+
+  root.appendChild(h('h2', {text:'Para hoy', style:'font-size:21px;color:#1E3A5C'}));
+  root.appendChild(h('p', {class:'muted', text:'Hola, ' + YO.name + '. Elige tu comida.'}));
+
+  vivos.forEach(function(m){
+    var meta = metaDe(m.id), cms = cierreMs(m.id);
+    var estado = h('div', {class:'meta', text:'…'});
+    var tarjeta = h('button', {class:'tarjeta pulsable', onclick:function(){ VISTA.menu = m.id; render(); }}, [
+      h('h3', {text:m.name}),
+      h('div', {class:'meta', text:meta.when}),
+      h('div', {class:'meta', text:meta.place}),
+      h('div', {style:'margin-top:9px;display:flex;gap:7px;flex-wrap:wrap'}, [
+        h('span', {class:'chip reloj', 'data-cd':(cms===null?'':String(cms)), text:textoCuenta(cms)})
+      ]),
+      h('hr', {class:'hilo'}),
+      estado
+    ]);
+    root.appendChild(tarjeta);
+    miPedido(m.id).then(function(p){
+      estado.textContent = '';
+      if(p && p.picks){
+        estado.appendChild(h('span', {class:'chip ok', text:'✓ Ya pediste'}));
+        var tiempos = m.courses.map(function(c){ return p.picks[c.name]; }).filter(Boolean);
+        estado.appendChild(h('div', {class:'meta', text:tiempos.join(' · ')}));
+      } else {
+        estado.appendChild(h('span', {class:'chip no', text:'Sin pedir'}));
+      }
+    }, function(){ estado.textContent = 'No pudimos leer tu pedido.'; estado.className = 'meta'; });
+  });
+}
+
+/* =========================================================
+   7. VISTA: MENÚ (hacer el pedido)
+   ========================================================= */
+function vistaMenu(root, menuId, conVolver){
+  var m = menuPorId(menuId), meta = metaDe(menuId), cms = cierreMs(menuId);
+  root.textContent = '';
+  if(!m){ root.appendChild(h('p', {class:'aviso', text:'Ese menú ya no existe.'})); return; }
+
+  if(conVolver) root.appendChild(h('button', {class:'volver',
+    onclick:function(){ VISTA.menu = null; render(); }}, '‹ Todas las comidas'));
+
+  root.appendChild(h('h2', {text:m.name, style:'font-size:22px;color:#1E3A5C'}));
+  root.appendChild(h('div', {class:'meta', text:meta.when}));
+  root.appendChild(h('div', {class:'meta', text:meta.place}));
+  root.appendChild(h('div', {style:'margin-top:9px'}, [
+    h('span', {class:'chip reloj', 'data-cd':(cms===null?'':String(cms)), text:textoCuenta(cms)})
+  ]));
+  if(m.incluye) root.appendChild(h('div', {class:'aviso pino', text:m.incluye}));
+
+  var picks = {}, nota = '';
+  var estado = h('p', {class:'estado', text:''});
+  var boton = h('button', {class:'btn', text:'Guardar mi pedido', disabled:true});
+  var areaObs = h('textarea', {placeholder:'Ej.: sin cebolla, poco ají, alergia a los mariscos…',
+                               'aria-label':'Observaciones para el restaurante'});
+
+  function refrescarBoton(){
+    // Solo cambia texto/atributos: no redibuja la pantalla.
+    var faltan = m.courses.filter(function(c){
+      return c.options.length > 1 && !picks[c.name];
+    });
+    if(vencido(menuId)){
+      boton.disabled = true; boton.textContent = 'Ya cerró';
+      estado.className = 'estado err';
+      estado.textContent = 'Esta comida cerró. Ya no se puede guardar.';
+      return;
+    }
+    boton.disabled = faltan.length > 0;
+    if(faltan.length){
+      estado.className = 'estado';
+      estado.textContent = 'Falta elegir: ' + faltan.map(function(c){ return c.name; }).join(', ') + '.';
+    } else if(estado.dataset.libre !== '1'){
+      estado.className = 'estado';
+      estado.textContent = 'Listo para guardar.';
+    }
+  }
+
+  m.courses.forEach(function(c, idx){
+    var obligatorio = c.options.length > 1;
+    var bloque = h('div', {class:'tiempo'});
+    bloque.appendChild(h('div', {class:'cab'}, [
+      h('span', {class:'num', text:String(idx+1)}),
+      h('h4', {text:c.name})
+    ]));
+    bloque.appendChild(h('div', {class:'regla',
+      text: obligatorio ? 'Elige 1 · obligatorio' : 'Opcional · tócalo para incluirlo'}));
+
+    var botones = [];
+    c.options.forEach(function(o){
+      var b = h('button', {class:'opcion', type:'button', 'aria-pressed':'false'}, [
+        h('span', {class:'n', text:o.n}),
+        o.d ? h('span', {class:'d', text:o.d}) : null
+      ]);
+      b.addEventListener('click', function(){
+        if(vencido(menuId)) { refrescarBoton(); return; }
+        var yaEstaba = b.getAttribute('aria-pressed') === 'true';
+        if(obligatorio){
+          botones.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+          b.setAttribute('aria-pressed','true');
+          picks[c.name] = o.n;
+        } else {
+          b.setAttribute('aria-pressed', yaEstaba ? 'false' : 'true');
+          if(yaEstaba) delete picks[c.name]; else picks[c.name] = o.n;
+        }
+        estado.dataset.libre = '';
+        refrescarBoton();
+      });
+      botones.push(b);
+      bloque.appendChild(b);
+    });
+    bloque.dataset.curso = c.name;
+    root.appendChild(bloque);
+  });
+
+  root.appendChild(h('label', {class:'campo', text:'Observaciones para el restaurante (opcional)'}));
+  root.appendChild(areaObs);
+  root.appendChild(estado);
+  root.appendChild(boton);
+
+  var extra = h('div');
+  root.appendChild(extra);
+
+  // Precarga lo que ya pedí (marcando los botones sin redibujar).
+  miPedido(menuId).then(function(p){
+    if(p && p.picks){
+      picks = JSON.parse(JSON.stringify(p.picks));
+      nota = p.note || '';
+      areaObs.value = nota;
+      Array.prototype.forEach.call(root.querySelectorAll('.tiempo'), function(bl){
+        var curso = bl.dataset.curso, elegido = picks[curso];
+        Array.prototype.forEach.call(bl.querySelectorAll('button.opcion'), function(b){
+          var nom = b.querySelector('.n').textContent;
+          b.setAttribute('aria-pressed', nom === elegido ? 'true' : 'false');
+        });
+      });
+      boton.textContent = 'Actualizar mi pedido';
+      estado.className = 'estado ok';
+      estado.textContent = 'Ya tienes pedido guardado. Puedes cambiarlo hasta el cierre.';
+      estado.dataset.libre = '1';
+    }
+    refrescarBoton();
+    if(boton.textContent === 'Guardar mi pedido' && !vencido(menuId) && p && p.picks){
+      boton.textContent = 'Actualizar mi pedido';
+    }
+  }, function(){ refrescarBoton(); });
+
+  boton.addEventListener('click', function(){
+    if(vencido(menuId)){ refrescarBoton(); return; }
+    var pedido = {
+      id: YO.id, name: YO.name, menuId: menuId,
+      picks: picks, note: (areaObs.value || '').trim(), at: new Date().toISOString()
+    };
+    var clave = clavePedido(menuId, YO.id);
+    boton.disabled = true;
+    estado.className = 'estado'; estado.textContent = 'Guardando…'; estado.dataset.libre = '1';
+    extra.textContent = '';
+    cloudSet(clave, pedido).then(function(){
+      LS.del('pend_' + clave);
+      delete CACHE['r_' + limpiaClave(menuId) + '__'];
+      estado.className = 'estado ok';
+      estado.textContent = '✓ Guardado. Gracias, ' + YO.name.split(' ')[0] + '.';
+      boton.disabled = false; boton.textContent = 'Actualizar mi pedido';
+    }, function(e){
+      var guardoLocal = LS.set('pend_' + clave, { key:clave, value:pedido });
+      boton.disabled = false;
+      if(guardoLocal){
+        estado.className = 'estado err';
+        estado.textContent = 'Guardado en tu teléfono, falta subirlo. Vuelve a abrir la app con señal.';
+      } else {
+        estado.className = 'estado err';
+        estado.textContent = 'No se pudo guardar: ' + errTexto(e);
+      }
+      extra.textContent = '';
+      extra.appendChild(h('button', {class:'btn sec chico',
+        onclick:function(){ VISTA.pantalla = 'diagnostico'; render(); }}, 'Ver diagnóstico'));
+    });
+  });
+}
+
+/* =========================================================
+   8. VISTA: EL GRUPO
+   ========================================================= */
+function registrados(){
+  return cloudList('p_').then(function(rows){
+    return rows.map(function(r){ return r.value && r.value.name; }).filter(Boolean);
+  }, function(){ return []; });
+}
+function faltantes(menuId, pedidos, gente){
+  var pidieron = {}, i;
+  for(i=0;i<pedidos.length;i++) pidieron[slug(pedidos[i].name)] = 1;
+  var falta = PEOPLE.filter(function(n){ return !pidieron[slug(n)]; });
+  var extras = (gente || []).filter(function(n){
+    return !pidieron[slug(n)] && !PEOPLE.some(function(p){ return slug(p) === slug(n); });
+  });
+  return unicos(falta.concat(extras));
+}
+function resumenTexto(m, pedidos, falta){
+  var meta = metaDe(m.id), L = [];
+  L.push('LA MESA · ' + m.name.toUpperCase());
+  if(meta.when) L.push(meta.when);
+  if(meta.place) L.push(meta.place);
+  if(m.incluye) L.push(m.incluye);
+  L.push('Pidieron: ' + pedidos.length + ' de ' + TOTAL_GRUPO);
+  L.push('');
+  L.push('--- CONTEO POR OPCIÓN ---');
+  m.courses.forEach(function(c){
+    L.push('');
+    L.push(c.name.toUpperCase());
+    c.options.forEach(function(o){
+      var n = pedidos.filter(function(p){ return p.picks && p.picks[c.name] === o.n; }).length;
+      if(n > 0) L.push('  ' + n + ' x ' + o.n);
+    });
+  });
+  var conObs = pedidos.filter(function(p){ return p.note; });
+  if(conObs.length){
+    L.push(''); L.push('--- OBSERVACIONES ---');
+    conObs.forEach(function(p){ L.push('  ' + p.name + ': ' + p.note); });
+  }
+  L.push(''); L.push('--- UNO POR UNO ---');
+  pedidos.forEach(function(p, i){
+    L.push((i+1) + '. ' + p.name);
+    m.courses.forEach(function(c){
+      if(p.picks && p.picks[c.name]) L.push('     ' + c.name + ': ' + p.picks[c.name]);
+    });
+    if(p.note) L.push('     Obs.: ' + p.note);
+  });
+  if(falta.length){
+    L.push(''); L.push('--- FALTAN POR PEDIR (' + falta.length + ') ---');
+    L.push('  ' + falta.join(', '));
+  }
+  return L.join('\n');
+}
+function descargarCSV(m, pedidos, falta){
+  var cols = ['Nombre'].concat(m.courses.map(function(c){ return c.name; })).concat(['Observaciones']);
+  function esc(v){ return '"' + String(v==null?'':v).replace(/"/g,'""') + '"'; }
+  var filas = [cols.map(esc).join(',')];
+  pedidos.forEach(function(p){
+    filas.push([esc(p.name)]
+      .concat(m.courses.map(function(c){ return esc((p.picks && p.picks[c.name]) || ''); }))
+      .concat([esc(p.note || '')]).join(','));
+  });
+  falta.forEach(function(n){
+    filas.push([esc(n)]
+      .concat(m.courses.map(function(){ return esc('SIN PEDIR'); }))
+      .concat([esc('')]).join(','));
+  });
+  var blob = new Blob(['﻿' + filas.join('\r\n')], {type:'text/csv;charset=utf-8'});
+  var a = h('a', {href:URL.createObjectURL(blob), download:'la-mesa-' + m.id + '.csv'});
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+function copiar(txt, avisar){
+  function viejo(){
+    var ta = h('textarea', {style:'position:fixed;left:-9999px;top:0'});
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    var ok = false; try{ ok = document.execCommand('copy'); }catch(e){}
+    ta.remove(); avisar(ok ? '✓ Copiado. Pégalo donde quieras.' : 'No se pudo copiar. Descarga el CSV.');
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){ avisar('✓ Copiado. Pégalo donde quieras.'); }, viejo);
+  } else viejo();
+}
+
+function vistaGrupo(root){
+  var vivos = menusVivos();
+  root.textContent = '';
+  root.appendChild(h('h2', {text:'El grupo', style:'font-size:21px;color:#1E3A5C'}));
+
+  if(!vivos.length){
+    root.appendChild(h('p', {class:'muted', text:'No hay comidas abiertas. Mira «Pasadas» para ver las anteriores.'}));
+    return;
+  }
+  if(!VISTA.grupo || !vivos.some(function(m){ return m.id === VISTA.grupo; })) VISTA.grupo = vivos[0].id;
+
+  if(vivos.length > 1){
+    var sel = h('div', {class:'selector', style:'margin-top:12px'});
+    vivos.forEach(function(m){
+      sel.appendChild(h('button', {
+        type:'button', 'aria-pressed': m.id === VISTA.grupo ? 'true' : 'false',
+        onclick:function(){ VISTA.grupo = m.id; render(); }
+      }, m.name + ' · ' + metaDe(m.id).when));
+    });
+    root.appendChild(sel);
+  }
+  var cuerpo = h('div');
+  root.appendChild(cuerpo);
+  pintarGrupo(cuerpo, VISTA.grupo, false);
+}
+
+function pintarGrupo(cuerpo, menuId, forzar){
+  var m = menuPorId(menuId);
+  cuerpo.textContent = '';
+  cuerpo.appendChild(h('div', {class:'cargando', text:'Leyendo los pedidos…'}));
+  Promise.all([pedidosDe(menuId, forzar), registrados()]).then(function(res){
+    var pedidos = res[0], gente = res[1], falta = faltantes(menuId, pedidos, gente);
+    cuerpo.textContent = '';
+
+    cuerpo.appendChild(h('div', {class:'tarjeta'}, [
+      h('div', {class:'grande', text:pedidos.length + ' de ' + TOTAL_GRUPO + ' ya pidieron'}),
+      h('div', {class:'meta', text:m.name + ' · ' + metaDe(menuId).place})
+    ]));
+
+    m.courses.forEach(function(c){
+      var caja = h('div', {class:'tarjeta'}, [h('h3', {text:c.name})]);
+      var hayAlgo = false;
+      c.options.forEach(function(o){
+        var quien = pedidos.filter(function(p){ return p.picks && p.picks[c.name] === o.n; });
+        if(!quien.length) return;
+        hayAlgo = true;
+        var pct = pedidos.length ? Math.round(quien.length * 100 / pedidos.length) : 0;
+        caja.appendChild(h('div', {class:'conteo'}, [
+          h('div', {class:'lbl'}, [h('span', {text:o.n}), h('b', {text:String(quien.length)})]),
+          h('div', {class:'barra'}, [h('i', {style:'width:' + pct + '%'})]),
+          h('div', {class:'quienes', text:quien.map(function(p){ return p.name; }).join(', ')})
+        ]));
+      });
+      if(!hayAlgo) caja.appendChild(h('p', {class:'muted', text:'Nadie ha elegido todavía.'}));
+      cuerpo.appendChild(caja);
+    });
+
+    var conObs = pedidos.filter(function(p){ return p.note; });
+    var cajaObs = h('div', {class:'tarjeta'}, [h('h3', {text:'Observaciones'})]);
+    if(conObs.length) conObs.forEach(function(p){
+      cajaObs.appendChild(h('p', {style:'font-size:14px;margin:8px 0'}, [
+        h('b', {text:p.name + ': '}), p.note
+      ]));
+    });
+    else cajaObs.appendChild(h('p', {class:'muted', text:'Sin observaciones.'}));
+    cuerpo.appendChild(cajaObs);
+
+    var cajaUno = h('div', {class:'tarjeta'}, [h('h3', {text:'Uno por uno'})]);
+    if(pedidos.length){
+      var ol = h('ol', {class:'unoauno'});
+      pedidos.forEach(function(p){
+        var li = h('li', {}, [h('b', {text:p.name})]);
+        m.courses.forEach(function(c){
+          if(p.picks && p.picks[c.name])
+            li.appendChild(h('div', {class:'t', text:c.name + ': ' + p.picks[c.name]}));
+        });
+        if(p.note) li.appendChild(h('div', {class:'obs', text:'Obs.: ' + p.note}));
+        ol.appendChild(li);
+      });
+      cajaUno.appendChild(ol);
+    } else cajaUno.appendChild(h('p', {class:'muted', text:'Todavía nadie ha pedido.'}));
+    cuerpo.appendChild(cajaUno);
+
+    var caja = h('div', {class:'caja'}, [
+      h('h4', {text:'Faltan por pedir (' + falta.length + ')'}),
+      h('p', {text: falta.length ? falta.join(', ') : '¡Nadie! Los 29 ya pidieron.'})
+    ]);
+    cuerpo.appendChild(caja);
+
+    var nota = h('p', {class:'estado'});
+    cuerpo.appendChild(h('button', {class:'btn sec', onclick:function(){
+      copiar(resumenTexto(m, pedidos, falta), function(msg){ nota.className = 'estado ok'; nota.textContent = msg; });
+    }}, 'Copiar resumen para el restaurante'));
+    cuerpo.appendChild(h('button', {class:'btn sec', onclick:function(){
+      descargarCSV(m, pedidos, falta); nota.className = 'estado ok'; nota.textContent = '✓ CSV descargado.';
+    }}, 'Descargar listado (CSV)'));
+    cuerpo.appendChild(h('button', {class:'btn sec', onclick:function(){
+      pintarGrupo(cuerpo, menuId, true);
+    }}, 'Actualizar'));
+    cuerpo.appendChild(nota);
+  }, function(e){
+    cuerpo.textContent = '';
+    cuerpo.appendChild(h('p', {class:'aviso', text:'No pudimos leer los pedidos: ' + errTexto(e)}));
+    cuerpo.appendChild(h('button', {class:'btn sec', onclick:function(){ pintarGrupo(cuerpo, menuId, true); }}, 'Reintentar'));
+    cuerpo.appendChild(h('button', {class:'btn sec',
+      onclick:function(){ VISTA.pantalla = 'diagnostico'; render(); }}, 'Ver diagnóstico'));
+  });
+}
+
+/* =========================================================
+   9. VISTA: PASADAS
+   ========================================================= */
+function vistaPasadas(root){
+  var pasadas = menusPasados();
+  root.textContent = '';
+
+  if(VISTA.pasada){
+    var m = menuPorId(VISTA.pasada);
+    root.appendChild(h('button', {class:'volver', onclick:function(){ VISTA.pasada = null; render(); }}, '‹ Pasadas'));
+    if(!m){ root.appendChild(h('p', {class:'aviso', text:'Ese menú ya no existe.'})); return; }
+    root.appendChild(h('h2', {text:m.name, style:'font-size:22px;color:#1E3A5C'}));
+    root.appendChild(h('div', {class:'meta', text:metaDe(m.id).when}));
+    root.appendChild(h('div', {class:'meta', text:metaDe(m.id).place}));
+    var caja = h('div', {class:'tarjeta'}, [h('h3', {text:'Lo que pediste'}), h('p', {class:'muted', text:'Leyendo…'})]);
+    root.appendChild(caja);
+    miPedido(m.id).then(function(p){
+      caja.textContent = '';
+      caja.appendChild(h('h3', {text:'Lo que pediste'}));
+      if(p && p.picks){
+        m.courses.forEach(function(c){
+          if(p.picks[c.name]) caja.appendChild(h('p', {style:'font-size:14.5px;margin:7px 0'}, [
+            h('b', {text:c.name + ': '}), p.picks[c.name]
+          ]));
+        });
+        if(p.note) caja.appendChild(h('p', {class:'obs', style:'color:#98252B;font-size:13.5px'}, 'Obs.: ' + p.note));
+      } else caja.appendChild(h('p', {class:'muted', text:'No quedó pedido tuyo en esta comida.'}));
+    }, function(){
+      caja.textContent = '';
+      caja.appendChild(h('h3', {text:'Lo que pediste'}));
+      caja.appendChild(h('p', {class:'muted', text:'No pudimos leerlo.'}));
+    });
+    var cuerpo = h('div');
+    root.appendChild(h('button', {class:'btn sec', onclick:function(){
+      pintarGrupo(cuerpo, m.id, true);
+    }}, 'Ver lo que pidió el grupo'));
+    root.appendChild(cuerpo);
+    return;
+  }
+
+  root.appendChild(h('h2', {text:'Pasadas', style:'font-size:21px;color:#1E3A5C'}));
+  if(!pasadas.length){
+    root.appendChild(h('p', {class:'muted', text:'Todavía no hay comidas cerradas.'}));
+    return;
+  }
+  pasadas.forEach(function(m){
+    root.appendChild(h('button', {class:'tarjeta pulsable',
+      onclick:function(){ VISTA.pasada = m.id; render(); }}, [
+      h('h3', {text:m.name}),
+      h('div', {class:'meta', text:metaDe(m.id).when}),
+      h('div', {class:'meta', text:metaDe(m.id).place}),
+      h('div', {style:'margin-top:8px'}, [h('span', {class:'chip no', text:'Cerrada'})])
+    ]));
+  });
+}
+
+/* =========================================================
+   10. VISTA: AJUSTES
+   ========================================================= */
+function vistaAjustes(root){
+  root.textContent = '';
+  root.appendChild(h('button', {class:'volver', onclick:function(){ VISTA.pantalla = null; render(); }}, '‹ Volver'));
+  root.appendChild(h('h2', {text:'Ajustes', style:'font-size:21px;color:#1E3A5C'}));
+
+  var mio = h('div', {class:'tarjeta'}, [
+    h('h3', {text:'Mi registro'}),
+    h('p', {class:'meta', text:YO ? YO.name : '(sin registrar)'}),
+    h('button', {class:'btn sec chico', onclick:function(){
+      var n = prompt('Tu nombre:', YO ? YO.name : '');
+      if(n && n.trim()){
+        YO.name = n.trim(); LS.set('mesa_me', YO);
+        cloudSet('p_' + limpiaClave(YO.id), {id:YO.id, name:YO.name, at:new Date().toISOString()}).catch(function(){});
+        CACHE = {}; render();
+      }
+    }}, 'Cambiar mi nombre'),
+    h('button', {class:'btn sec chico', onclick:function(){
+      if(confirm('¿Salir de este teléfono? Tendrás que buscar tu nombre otra vez.')){
+        LS.del('mesa_me'); YO = null; VISTA.pantalla = null; render();
+      }
+    }}, 'Salir de este teléfono')
+  ]);
+  root.appendChild(mio);
+
+  var pruebaNota = h('p', {class:'estado'});
+  root.appendChild(h('div', {class:'tarjeta'}, [
+    h('h3', {text:'Prueba de guardado'}),
+    h('p', {class:'muted', text:'Escribe y borra un dato de prueba en la nube.'}),
+    h('button', {class:'btn sec chico', onclick:function(){
+      pruebaNota.className = 'estado'; pruebaNota.textContent = 'Probando…';
+      var k = 'dg_test';
+      cloudSet(k, {ok:true, at:new Date().toISOString()})
+        .then(function(){ return cloudGet(k); })
+        .then(function(v){
+          if(!v || v.ok !== true) throw new Error('lo leído no coincide');
+          return cloudDel(k);
+        })
+        .then(function(){ pruebaNota.className = 'estado ok'; pruebaNota.textContent = '✓ Escribir, leer y borrar funcionan.'; },
+              function(e){ pruebaNota.className = 'estado err'; pruebaNota.textContent = '✗ Falló: ' + errTexto(e); });
+    }}, 'Probar ahora'),
+    pruebaNota
+  ]));
+
+  if(!ORG){
+    var pass = h('input', {type:'password', placeholder:'Clave', autocomplete:'off'});
+    var nota = h('p', {class:'estado'});
+    root.appendChild(h('div', {class:'tarjeta'}, [
+      h('h3', {text:'Modo organizador'}),
+      h('p', {class:'muted', text:'Solo para quien coordina la comida.'}),
+      pass,
+      h('button', {class:'btn chico', onclick:function(){
+        if(pass.value === CLAVE_ORG){ ORG = true; LS.set('mesa_org', true); render(); }
+        else { nota.className = 'estado err'; nota.textContent = 'Clave incorrecta.'; }
+      }}, 'Entrar'),
+      nota
+    ]));
+  } else {
+    root.appendChild(h('button', {class:'btn', onclick:function(){ VISTA.pantalla = 'org'; render(); }}, 'Abrir modo organizador'));
+    root.appendChild(h('button', {class:'btn sec chico', onclick:function(){
+      ORG = false; LS.set('mesa_org', false); render();
+    }}, 'Salir del modo organizador'));
+  }
+
+  root.appendChild(h('hr', {class:'hilo'}));
+  root.appendChild(h('button', {class:'btn sec chico',
+    onclick:function(){ VISTA.pantalla = 'diagnostico'; render(); }}, 'Ver diagnóstico'));
+}
+
+/* =========================================================
+   11. VISTA: DIAGNÓSTICO
+   ========================================================= */
+function vistaDiagnostico(root){
+  root.textContent = '';
+  root.appendChild(h('button', {class:'volver', onclick:function(){ VISTA.pantalla = null; render(); }}, '‹ Volver'));
+  root.appendChild(h('h2', {text:'Diagnóstico', style:'font-size:21px;color:#1E3A5C'}));
+  var out = h('pre', {class:'diag', text:'Corriendo pruebas…'});
+  root.appendChild(out);
+
+  var L = [];
+  L.push('URL nube: ' + SB_URL);
+  L.push('Clave: ' + (SB_KEY.indexOf('__SUPABASE') === 0 ? '⚠ SIN CONFIGURAR' : 'configurada (' + SB_KEY.length + ' car.)'));
+  L.push('Yo: ' + (YO ? YO.name + ' [' + YO.id + ']' : 'sin registrar'));
+  L.push('Hora del teléfono: ' + new Date().toString());
+  L.push('Pendientes por subir: ' + LS.keys().filter(function(k){ return k.indexOf('pend_') === 0; }).length);
+  L.push('');
+  out.textContent = L.join('\n');
+
+  function paso(nombre, fn){
+    L.push('· ' + nombre + ': …'); out.textContent = L.join('\n');
+    return fn().then(function(d){
+      L[L.length-1] = '· ' + nombre + ': OK' + (d ? ' — ' + d : '');
+    }, function(e){
+      L[L.length-1] = '· ' + nombre + ': FALLÓ — ' + errTexto(e);
+    }).then(function(){ out.textContent = L.join('\n'); });
+  }
+  var k = 'dg_test';
+  paso('escribir en la nube', function(){ return cloudSet(k, {ok:true, at:new Date().toISOString()}); })
+  .then(function(){ return paso('leer de la nube', function(){
+      return cloudGet(k).then(function(v){ return v && v.ok === true ? 'valor correcto' : 'valor inesperado: ' + JSON.stringify(v); });
+  }); })
+  .then(function(){ return paso('listar por prefijo', function(){
+      return cloudList('p_').then(function(r){ return r.length + ' personas registradas'; });
+  }); })
+  .then(function(){ return paso('borrar de la nube', function(){ return cloudDel(k); }); })
+  .then(function(){ return paso('escribir en el teléfono', function(){
+      var ok = LS.set('dg_local', {t:Date.now()}); LS.del('dg_local');
+      return ok ? Promise.resolve('localStorage disponible') : Promise.reject(new Error('localStorage bloqueado'));
+  }); })
+  .then(function(){
+    L.push(''); L.push('Si todo dice OK, la app está bien conectada.');
+    out.textContent = L.join('\n');
+  });
+}
+
+/* =========================================================
+   12. VISTA: ORGANIZADOR
+   ========================================================= */
+function parsearMenu(txto){
+  var lineas = String(txto || '').split('\n'), courses = [], actual = null, i, l, m, nom, det;
+  for(i=0;i<lineas.length;i++){
+    l = lineas[i].trim();
+    if(!l) continue;
+    if(/^[-–•*]/.test(l)){
+      if(!actual){ actual = {name:'Opciones', options:[]}; courses.push(actual); }
+      m = l.replace(/^[-–•*]\s*/, '');
+      var p = m.indexOf(':');
+      if(p > 0){ nom = m.slice(0,p).trim(); det = m.slice(p+1).trim(); }
+      else { nom = m; det = ''; }
+      actual.options.push(det ? {n:nom, d:det} : {n:nom});
+    } else {
+      actual = {name:l.replace(/:$/,''), options:[]};
+      courses.push(actual);
+    }
+  }
+  return courses.filter(function(c){ return c.options.length; });
+}
+
+function vistaOrg(root){
+  root.textContent = '';
+  root.appendChild(h('button', {class:'volver', onclick:function(){ VISTA.pantalla = 'ajustes'; render(); }}, '‹ Ajustes'));
+  root.appendChild(h('h2', {text:'Organizador', style:'font-size:21px;color:#1E3A5C'}));
+
+  var vivos = menusVivos();
+  root.appendChild(h('div', {class:'aviso oro', text:'Abiertas ahora (' + vivos.length + ')' +
+    (vivos.length ? ': ' + vivos.map(function(m){ return m.name; }).join(', ') : '')}));
+
+  var nota = h('p', {class:'estado'});
+  function guardar(msg){
+    nota.className = 'estado'; nota.textContent = 'Guardando…';
+    guardarEstado().then(function(){
+      nota.className = 'estado ok'; nota.textContent = '✓ ' + msg; render();
+    }, function(e){
+      nota.className = 'estado err'; nota.textContent = 'No se pudo guardar: ' + errTexto(e);
+    });
+  }
+
+  // --- abrir / cerrar / editar cada comida ---
+  unicos(STATE.open.concat(STATE.closed)).map(menuPorId).filter(Boolean).forEach(function(m){
+    var abierta = STATE.open.indexOf(m.id) >= 0;
+    var meta = metaDe(m.id);
+    var iWhen  = h('input', {type:'text', value:meta.when});
+    var iPlace = h('input', {type:'text', value:meta.place});
+    var iClose = h('input', {type:'datetime-local', value:meta.close});
+    root.appendChild(h('div', {class:'tarjeta'}, [
+      h('h3', {text:m.name}),
+      h('div', {style:'margin:7px 0'}, [
+        h('span', {class: abierta ? 'chip ok' : 'chip no', text: abierta ? 'Abierta' : 'Cerrada'}),
+        vencido(m.id) ? h('span', {class:'chip no', style:'margin-left:6px', text:'Vencida por hora'}) : null
+      ]),
+      h('label', {class:'campo', text:'Cuándo'}), iWhen,
+      h('label', {class:'campo', text:'Sitio'}), iPlace,
+      h('label', {class:'campo', text:'Se cierra el'}), iClose,
+      h('div', {class:'fila'}, [
+        h('button', {class:'btn chico', onclick:function(){
+          STATE.meta[m.id] = {when:iWhen.value.trim(), place:iPlace.value.trim(), close:iClose.value};
+          guardar('Datos actualizados.');
+        }}, 'Guardar datos'),
+        h('button', {class: abierta ? 'btn chico carmin' : 'btn chico', onclick:function(){
+          if(abierta){
+            STATE.open = STATE.open.filter(function(x){ return x !== m.id; });
+            if(STATE.closed.indexOf(m.id) < 0) STATE.closed.push(m.id);
+            guardar('Comida cerrada.');
+          } else {
+            STATE.closed = STATE.closed.filter(function(x){ return x !== m.id; });
+            if(STATE.open.indexOf(m.id) < 0) STATE.open.push(m.id);
+            guardar('Comida abierta.');
+          }
+        }}, abierta ? 'Cerrar' : 'Abrir')
+      ])
+    ]));
+  });
+  root.appendChild(nota);
+
+  // --- pedir por otra persona ---
+  root.appendChild(h('hr', {class:'hilo'}));
+  var cajaOtro = h('div', {class:'tarjeta'}, [h('h3', {text:'Pedir por otra persona'})]);
+  var abiertas = menusVivos();
+  if(!abiertas.length){
+    cajaOtro.appendChild(h('p', {class:'muted', text:'No hay comidas abiertas.'}));
+  } else {
+    var selMenu = h('select', {}, abiertas.map(function(m){ return h('option', {value:m.id}, m.name); }));
+    var dl = h('datalist', {id:'dl-gente'}, PEOPLE.map(function(n){ return h('option', {value:n}); }));
+    var iNom = h('input', {type:'text', list:'dl-gente', placeholder:'Nombre', autocomplete:'off'});
+    var zona = h('div');
+    var iObs = h('textarea', {placeholder:'Observaciones (opcional)'});
+    var notaOtro = h('p', {class:'estado'});
+    function pintarTiempos(){
+      var m = menuPorId(selMenu.value);
+      zona.textContent = '';
+      if(!m) return;
+      m.courses.forEach(function(c){
+        zona.appendChild(h('label', {class:'campo', text:c.name + (c.options.length > 1 ? '' : ' (opcional)')}));
+        zona.appendChild(h('select', {'data-curso':c.name},
+          [h('option', {value:''}, c.options.length > 1 ? '— elegir —' : '— no lleva —')]
+          .concat(c.options.map(function(o){ return h('option', {value:o.n}, o.n); }))));
+      });
+    }
+    selMenu.addEventListener('change', pintarTiempos);
+    cajaOtro.appendChild(h('label', {class:'campo', text:'Comida'})); cajaOtro.appendChild(selMenu);
+    cajaOtro.appendChild(h('label', {class:'campo', text:'Nombre'})); cajaOtro.appendChild(iNom); cajaOtro.appendChild(dl);
+    cajaOtro.appendChild(zona);
+    cajaOtro.appendChild(h('label', {class:'campo', text:'Observaciones'})); cajaOtro.appendChild(iObs);
+    cajaOtro.appendChild(h('button', {class:'btn chico', onclick:function(){
+      var nombre = iNom.value.trim();
+      if(!nombre){ notaOtro.className = 'estado err'; notaOtro.textContent = 'Falta el nombre.'; return; }
+      var m = menuPorId(selMenu.value), picks = {};
+      Array.prototype.forEach.call(zona.querySelectorAll('select'), function(s){
+        if(s.value) picks[s.getAttribute('data-curso')] = s.value;
+      });
+      var faltan = m.courses.filter(function(c){ return c.options.length > 1 && !picks[c.name]; });
+      if(faltan.length){
+        notaOtro.className = 'estado err';
+        notaOtro.textContent = 'Falta elegir: ' + faltan.map(function(c){ return c.name; }).join(', ') + '.';
+        return;
+      }
+      notaOtro.className = 'estado'; notaOtro.textContent = 'Guardando…';
+      // Reusa el id de la persona si ya estaba registrada.
+      registrados_completos().then(function(gente){
+        var hallado = gente.filter(function(g){ return slug(g.name) === slug(nombre); })[0];
+        var pid = hallado ? hallado.id : nuevoPersonaId(nombre);
+        var pedido = {id:pid, name:nombre, menuId:m.id, picks:picks, note:iObs.value.trim(),
+                      at:new Date().toISOString(), por:YO ? YO.name : 'organizador'};
+        return cloudSet('p_' + limpiaClave(pid), {id:pid, name:nombre, at:new Date().toISOString()})
+          .catch(function(){})
+          .then(function(){ return cloudSet(clavePedido(m.id, pid), pedido); });
+      }).then(function(){
+        CACHE = {};
+        notaOtro.className = 'estado ok'; notaOtro.textContent = '✓ Pedido guardado para ' + nombre + '.';
+        iNom.value = ''; iObs.value = ''; pintarTiempos();
+      }, function(e){
+        notaOtro.className = 'estado err'; notaOtro.textContent = 'No se pudo guardar: ' + errTexto(e);
+      });
+    }}, 'Guardar pedido'));
+    cajaOtro.appendChild(notaOtro);
+    pintarTiempos();
+  }
+  root.appendChild(cajaOtro);
+
+  // --- cargar un menú nuevo ---
+  var iNombre = h('input', {type:'text', placeholder:'Ej.: Almuerzo en Cusco'});
+  var iSitio  = h('input', {type:'text', placeholder:'Ej.: Restaurante Pachapapa'});
+  var iCuando = h('input', {type:'text', placeholder:'Ej.: Almuerzo · sábado 5 de septiembre'});
+  var iCierra = h('input', {type:'datetime-local'});
+  var iTexto  = h('textarea', {style:'min-height:150px', placeholder:
+    'Entrada\n- Ceviche: pesca del día, camote\n- Causa limeña\nPlato de fondo\n- Lomo saltado\n- Ají de gallina\nPostre\n- Helado'});
+  var notaNuevo = h('p', {class:'estado'});
+  root.appendChild(h('div', {class:'tarjeta'}, [
+    h('h3', {text:'Cargar un menú nuevo'}),
+    h('p', {class:'muted', text:'Línea sin guion = tiempo. Línea con guion = opción. «Nombre: descripción» separa nombre y detalle.'}),
+    h('label', {class:'campo', text:'Nombre de la comida'}), iNombre,
+    h('label', {class:'campo', text:'Sitio'}), iSitio,
+    h('label', {class:'campo', text:'Cuándo'}), iCuando,
+    h('label', {class:'campo', text:'Se cierra el'}), iCierra,
+    h('label', {class:'campo', text:'Menú'}), iTexto,
+    h('button', {class:'btn chico', onclick:function(){
+      var nombre = iNombre.value.trim();
+      var courses = parsearMenu(iTexto.value);
+      if(!nombre){ notaNuevo.className='estado err'; notaNuevo.textContent='Falta el nombre de la comida.'; return; }
+      if(!courses.length){ notaNuevo.className='estado err'; notaNuevo.textContent='El menú no tiene opciones legibles.'; return; }
+      var id = slug(nombre);
+      if(menuPorId(id)) id = id + '-' + rand4();
+      STATE.custom.push({id:id, name:nombre, place:iSitio.value.trim(), incluye:'', courses:courses});
+      STATE.meta[id] = {when:iCuando.value.trim(), place:iSitio.value.trim(), close:iCierra.value};
+      STATE.open.push(id);
+      notaNuevo.className='estado'; notaNuevo.textContent='Guardando…';
+      guardarEstado().then(function(){
+        notaNuevo.className='estado ok';
+        notaNuevo.textContent='✓ «' + nombre + '» creado con ' + courses.length + ' tiempos y abierto.';
+        CACHE = {}; render();
+      }, function(e){
+        notaNuevo.className='estado err'; notaNuevo.textContent='No se pudo guardar: ' + errTexto(e);
+      });
+    }}, 'Crear y abrir'),
+    notaNuevo
+  ]));
+
+  // --- gente del viaje ---
+  var cajaGente = h('div', {class:'tarjeta'}, [h('h3', {text:'Gente del viaje'}), h('p', {class:'muted', text:'Leyendo…'})]);
+  root.appendChild(cajaGente);
+  registrados().then(function(gente){
+    var entraron = PEOPLE.filter(function(n){ return gente.some(function(g){ return slug(g) === slug(n); }); });
+    var falta = PEOPLE.filter(function(n){ return !gente.some(function(g){ return slug(g) === slug(n); }); });
+    var extras = gente.filter(function(g){ return !PEOPLE.some(function(n){ return slug(n) === slug(g); }); });
+    cajaGente.textContent = '';
+    cajaGente.appendChild(h('h3', {text:'Gente del viaje'}));
+    cajaGente.appendChild(h('div', {class:'grande', text:entraron.length + ' de ' + TOTAL_GRUPO + ' ya entraron'}));
+    cajaGente.appendChild(h('p', {style:'font-size:13.5px;margin-top:9px'}, [
+      h('b', {text:'Faltan por entrar (' + falta.length + '): '}), falta.join(', ') || '—'
+    ]));
+    if(extras.length) cajaGente.appendChild(h('p', {style:'font-size:13.5px'}, [
+      h('b', {text:'Fuera de la lista (' + extras.length + '): '}), unicos(extras).join(', ')
+    ]));
+  }, function(){
+    cajaGente.textContent = '';
+    cajaGente.appendChild(h('h3', {text:'Gente del viaje'}));
+    cajaGente.appendChild(h('p', {class:'muted', text:'No pudimos leerlo.'}));
+  });
+}
+function registrados_completos(){
+  return cloudList('p_').then(function(rows){
+    return rows.map(function(r){ return r.value; }).filter(function(v){ return v && v.name && v.id; });
+  }, function(){ return []; });
+}
+
+/* =========================================================
+   13. ENRUTADOR Y ARRANQUE
+   ========================================================= */
+var APP = document.getElementById('app');
+var PESTANAS = document.getElementById('pestanas');
+
+function render(){
+  if(!STATE){ return; }
+  var falta = SB_KEY.indexOf('__SUPABASE') === 0;
+  APP.textContent = '';
+
+  if(falta){
+    APP.appendChild(h('div', {class:'aviso',
+      text:'Falta configurar la clave de Supabase en index.html. Nada se va a guardar todavía.'}));
+  }
+  if(!YO){
+    PESTANAS.hidden = true;
+    return vistaRegistro(APP);
+  }
+  PESTANAS.hidden = false;
+
+  if(VISTA.pantalla === 'ajustes')     return vistaAjustes(APP);
+  if(VISTA.pantalla === 'diagnostico') return vistaDiagnostico(APP);
+  if(VISTA.pantalla === 'org')         return ORG ? vistaOrg(APP) : vistaAjustes(APP);
+
+  Array.prototype.forEach.call(PESTANAS.querySelectorAll('button[data-tab]'), function(b){
+    if(b.getAttribute('data-tab') === VISTA.tab) b.setAttribute('aria-current','page');
+    else b.removeAttribute('aria-current');
+  });
+  if(VISTA.tab === 'hoy')     return vistaHoy(APP);
+  if(VISTA.tab === 'grupo')   return vistaGrupo(APP);
+  if(VISTA.tab === 'pasadas') return vistaPasadas(APP);
+}
+
+Array.prototype.forEach.call(PESTANAS.querySelectorAll('button[data-tab]'), function(b){
+  b.addEventListener('click', function(){
+    var t = b.getAttribute('data-tab');
+    if(VISTA.tab === t && !VISTA.pantalla){
+      // Volver al listado si ya estábamos en la pestaña.
+      VISTA.menu = null; VISTA.pasada = null;
+    }
+    VISTA.tab = t; VISTA.pantalla = null;
+    if(t !== 'hoy') VISTA.menu = null;
+    if(t !== 'pasadas') VISTA.pasada = null;
+    render();
+  });
+});
+document.getElementById('btn-ajustes').addEventListener('click', function(){
+  VISTA.pantalla = VISTA.pantalla ? null : 'ajustes';
+  render();
+});
+
+// Cuenta regresiva: solo cambia el texto de los chips, cada 20 s.
+function tictac(){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-cd]'), function(n){
+    var ms = n.getAttribute('data-cd');
+    if(!ms) return;
+    var t = textoCuenta(Number(ms));
+    if(n.textContent !== t) n.textContent = t;
+  });
+}
+setInterval(tictac, 20000);
+
+// Al volver del segundo plano, refresca por si ya cerró.
+document.addEventListener('visibilitychange', function(){
+  if(!document.hidden && STATE){ tictac(); }
+});
+
+cargarEstado().then(function(){
+  return subirPendientes().catch(function(){});
+}).then(function(){
+  render();
+}, function(e){
+  APP.textContent = '';
+  APP.appendChild(h('div', {class:'aviso', text:'No pudimos arrancar: ' + errTexto(e)}));
+  APP.appendChild(h('button', {class:'btn sec', onclick:function(){ location.reload(); }}, 'Reintentar'));
+});
+</script>
+</body>
+</html>
