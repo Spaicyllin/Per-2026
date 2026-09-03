@@ -225,7 +225,7 @@ pre.diag{
    ========================================================= */
 var SB_URL = 'https://bylwleqgxonnnjynhqol.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bHdsZXFneG9ubm5qeW5ocW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDU5MzgsImV4cCI6MjEwNDAyMTkzOH0.vdeBQwykywU7sbI7_4LS9F9Nbj1wHs3u-txFHAuR6jM';
-var SEED = 4;
+var SEED = 5;
 var TOTAL_GRUPO = 29;
 var CLAVE_ORG = 'pisco';
 var TIMEOUT = 12000;
@@ -291,8 +291,8 @@ var SEMILLA = {
   closed: [],
   custom: [],
   meta: {
-    'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:'2026-09-04T10:00'},
-    'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:'2026-09-04T10:00'}
+    'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:''},
+    'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:''}
   }
 };
 
@@ -485,6 +485,11 @@ function textoCuenta(ms){
   if(hh >= 1) return 'cierra en ' + hh + ' h ' + (min%60) + ' min';
   return 'cierra en ' + min + ' min';
 }
+function chipCierre(cms){
+  if(cms === null) return h('span', {class:'chip ok', text:'Abierta · sin hora de cierre'});
+  return h('span', {class:'chip reloj', 'data-cd':String(cms), text:textoCuenta(cms)});
+}
+
 function clavePedido(menuId, personaId){ return 'r_' + limpiaClave(menuId) + '__' + limpiaClave(personaId); }
 function nuevoPersonaId(nombre){ return slug(nombre) + '-' + rand4(); }
 
@@ -591,9 +596,7 @@ function vistaHoy(root){
       h('h3', {text:m.name}),
       h('div', {class:'meta', text:meta.when}),
       h('div', {class:'meta', text:meta.place}),
-      h('div', {style:'margin-top:9px;display:flex;gap:7px;flex-wrap:wrap'}, [
-        h('span', {class:'chip reloj', 'data-cd':(cms===null?'':String(cms)), text:textoCuenta(cms)})
-      ]),
+      h('div', {style:'margin-top:9px;display:flex;gap:7px;flex-wrap:wrap'}, [chipCierre(cms)]),
       h('hr', {class:'hilo'}),
       estado
     ]);
@@ -625,9 +628,7 @@ function vistaMenu(root, menuId, conVolver){
   root.appendChild(h('h2', {text:m.name, style:'font-size:22px;color:#1E3A5C'}));
   root.appendChild(h('div', {class:'meta', text:meta.when}));
   root.appendChild(h('div', {class:'meta', text:meta.place}));
-  root.appendChild(h('div', {style:'margin-top:9px'}, [
-    h('span', {class:'chip reloj', 'data-cd':(cms===null?'':String(cms)), text:textoCuenta(cms)})
-  ]));
+  root.appendChild(h('div', {style:'margin-top:9px'}, [chipCierre(cms)]));
   if(m.incluye) root.appendChild(h('div', {class:'aviso pino', text:m.incluye}));
 
   var picks = {}, nota = '';
