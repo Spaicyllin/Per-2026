@@ -191,6 +191,7 @@ pre.diag{
       </button>
     </div>
   </header>
+  <div id="avisos"></div>
   <main id="app"><div class="cargando">Poniendo la mesa…</div></main>
 </div>
 
@@ -404,6 +405,12 @@ var LS = {
   del:function(k){ try{ localStorage.removeItem(k); }catch(e){} },
   keys:function(){ try{ return Object.keys(localStorage); }catch(e){ return []; } }
 };
+
+function almacenOk(){
+  var ok = LS.set('mesa_probe', 1);
+  LS.del('mesa_probe');
+  return ok;
+}
 
 /* =========================================================
    4. ESTADO
@@ -1333,15 +1340,22 @@ function registrados_completos(){
    ========================================================= */
 var APP = document.getElementById('app');
 var PESTANAS = document.getElementById('pestanas');
+var AVISOS = document.getElementById('avisos');
 
 function render(){
   if(!STATE){ return; }
-  var falta = sinClave();
   APP.textContent = '';
+  AVISOS.textContent = '';
 
-  if(falta){
-    APP.appendChild(h('div', {class:'aviso',
+  if(sinClave()){
+    AVISOS.appendChild(h('div', {class:'aviso',
       text:'Falta configurar la clave de Supabase en index.html. Nada se va a guardar todavía.'}));
+  }
+  if(!almacenOk()){
+    AVISOS.appendChild(h('div', {class:'aviso',
+      text:'Este navegador está bloqueando el almacenamiento, así que la app no puede recordar quién eres ' +
+           'ni guardar un pedido si se cae la señal. Ábrela en una pestaña normal del navegador: no dentro ' +
+           'de un visor de archivos, ni en una ventana privada.'}));
   }
   if(!YO){
     PESTANAS.hidden = true;
