@@ -102,7 +102,7 @@ button.opcion{
   background:var(--tarjeta);border:1.5px solid var(--linea);border-radius:12px;color:var(--tinta);
 }
 button.opcion .n{display:block;font-weight:650;font-size:15.5px}
-button.opcion .d{display:block;font-size:13px;color:rgba(36,28,20,.65);margin-top:2px}
+button.opcion .d{display:block;font-size:13px;color:rgba(36,28,20,.65);margin-top:4px;white-space:pre-line;line-height:1.45}
 button.opcion[aria-pressed=true]{
   border-color:var(--pino);background:rgba(58,92,66,.12);box-shadow:inset 0 0 0 1px rgba(58,92,66,.4)
 }
@@ -241,7 +241,7 @@ pre.diag{
    ========================================================= */
 var SB_URL = 'https://bylwleqgxonnnjynhqol.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bHdsZXFneG9ubm5qeW5ocW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDU5MzgsImV4cCI6MjEwNDAyMTkzOH0.vdeBQwykywU7sbI7_4LS9F9Nbj1wHs3u-txFHAuR6jM';
-var SEED = 5;
+var SEED = 6;
 var TOTAL_GRUPO = 29;
 var CLAVE_ORG = 'pisco';
 var TIMEOUT = 12000;
@@ -299,16 +299,36 @@ var MENUS_FIJOS = [
       {name:'Bebida caliente', options:[{n:'Café americano'},{n:'Infusión'}]}
     ]
   }
+  ,{
+    id:'tres-opciones', name:'Menú de tres opciones', place:'Por confirmar', incluye:'',
+    courses:[
+      {name:'Elige tu opción', options:[
+        {n:'Opción 1 · Trucha pachamanquera',
+         d:'Entrada · Crema de papa & poro — papa nativa, mantequilla regional, tocino y poro crocante\n' +
+           'Fondo · Trucha pachamanquera — filete al grill, salsa de hierbas andinas, tubérculos asados y ensaladita\n' +
+           'Postre · Semifredo de lúcuma — crema texturizada, brownie bites, salsa de cacao y frambuesas'},
+        {n:'Opción 2 · Pechuga a la brasa',
+         d:'Entrada · Sopa de quinua — caldo concentrado de verduras, quinua y papa\n' +
+           'Fondo · Pechuga a la brasa — pollo marinado en salsa de hierbas andinas, escribano de papa\n' +
+           'Postre · Mousse de maracuyá'},
+        {n:'Opción 3 · Tacu tacu norteño',
+         d:'Entrada · Ensalada mistura — pollo crocante, mix de lechugas, mezclum, croutones, polvo de tocino\n' +
+           'Fondo · Tacu tacu norteño — frejoles con arroz, mariscos flambeados y crema de ajíes norteños\n' +
+           'Postre · Brownie de chocolate y helado de almendras'}
+      ]}
+    ]
+  }
 ];
 
 var SEMILLA = {
   seed: SEED,
-  open: ['parquetito-turistico','almuerzo-cena-3tiempos'],
+  open: ['parquetito-turistico','almuerzo-cena-3tiempos','tres-opciones'],
   closed: [],
   custom: [],
   meta: {
     'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:''},
-    'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:''}
+    'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:''},
+    'tres-opciones':          {when:'Por confirmar',                  place:'Por confirmar',            close:''}
   }
 };
 
