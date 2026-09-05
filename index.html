@@ -250,13 +250,13 @@ pre.diag{
    ========================================================= */
 var SB_URL = 'https://bylwleqgxonnnjynhqol.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bHdsZXFneG9ubm5qeW5ocW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDU5MzgsImV4cCI6MjEwNDAyMTkzOH0.vdeBQwykywU7sbI7_4LS9F9Nbj1wHs3u-txFHAuR6jM';
-var SEED = 7;
-var TOTAL_GRUPO = 29;
+var SEED = 8;
+var TOTAL_GRUPO = 30;
 var CLAVE_ORG = 'pisco';
 var TIMEOUT = 12000;
 
 var PEOPLE = [
-  'Alvaro Marimon','Ana Ramirez','Andres Olaya','Carla Rago','Carolina Zapata',
+  'Adriana Amaya','Alvaro Marimon','Ana Ramirez','Andres Olaya','Carla Rago','Carolina Zapata',
   'Catalina Velasquez','Daniel Espinosa','David Arocha','Gisella GT','Isabel Ramirez',
   'Jennifer Posada','Jhoan','Jose Manual Penagos','Julian Cardona','Katherine Espinoza Polo',
   'Laura Giraldo','Lila Bertel','Lina Marulanda','Lizeth Jaramillo','Lorena Lopez',
@@ -327,17 +327,38 @@ var MENUS_FIJOS = [
       ]}
     ]
   }
+  ,{
+    id:'mistura-cusco', name:'Almuerzo en Mistura', place:'Mistura · Cusco', incluye:'',
+    courses:[
+      {name:'Entrada', options:[
+        {n:'Crema de papa & poro', d:'Papa nativa, mantequilla regional, tocino y poro crocante'},
+        {n:'Sopa de quinua', d:'Caldo concentrado de verduras, quinua y papa'},
+        {n:'Ensalada mistura', d:'Pollo crocante, mix de lechugas, mezclum, croutones, polvo de tocino'}
+      ]},
+      {name:'Plato de fondo', options:[
+        {n:'Pechuga a la brasa', d:'Pechuga marinada en salsa de hierbas andinas, escribano de papa'},
+        {n:'Trucha pachamanquera', d:'Filete de trucha al grill, salsa de hierbas andinas, tuberculos asados y ensaladita'},
+        {n:'Tacu tacu norte', d:'Mezcla crocante de frejoles con arroz, mariscos flambeados y crema de ajies norteños'}
+      ]},
+      {name:'Postre', options:[
+        {n:'Semifredo de lucuma', d:'Crema de lucuma texturizada, brownie bites, salsa de cacao y frambuesas'},
+        {n:'Brownie de chocolate', d:'Con helado de almendras'},
+        {n:'Mousse de maracumango'}
+      ]}
+    ]
+  }
 ];
 
 var SEMILLA = {
   seed: SEED,
-  open: ['parquetito-turistico','almuerzo-cena-3tiempos','tres-opciones'],
-  closed: [],
+  open: ['mistura-cusco'],
+  closed: ['parquetito-turistico','almuerzo-cena-3tiempos','tres-opciones'],
   custom: [],
   meta: {
     'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:''},
     'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:''},
-    'tres-opciones':          {when:'Almuerzo · sábado 5 de septiembre', place:'Cusco',                 close:''}
+    'tres-opciones':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Cusco',                     close:''},
+    'mistura-cusco':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Mistura · Cusco',           close:'2026-09-05T10:00'}
   }
 };
 
