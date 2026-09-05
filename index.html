@@ -1552,26 +1552,75 @@ function vistaOrg(root){
   ]));
 
   // --- gente del viaje ---
-  var cajaGente = h('div', {class:'tarjeta'}, [h('h3', {text:'Gente del viaje'}), h('p', {class:'muted', text:'Leyendo…'})]);
+  var cajaGente = h('div', {class:'tarjeta'});
   root.appendChild(cajaGente);
-  registrados().then(function(gente){
-    var entraron = PEOPLE.filter(function(n){ return gente.some(function(g){ return slug(g) === slug(n); }); });
-    var falta = PEOPLE.filter(function(n){ return !gente.some(function(g){ return slug(g) === slug(n); }); });
-    var extras = gente.filter(function(g){ return !PEOPLE.some(function(n){ return slug(n) === slug(g); }); });
+  function pintarGente(){
     cajaGente.textContent = '';
     cajaGente.appendChild(h('h3', {text:'Gente del viaje'}));
-    cajaGente.appendChild(h('div', {class:'grande', text:entraron.length + ' de ' + TOTAL_GRUPO + ' ya entraron'}));
-    cajaGente.appendChild(h('p', {style:'font-size:13.5px;margin-top:9px'}, [
-      h('b', {text:'Faltan por entrar (' + falta.length + '): '}), falta.join(', ') || '—'
-    ]));
-    if(extras.length) cajaGente.appendChild(h('p', {style:'font-size:13.5px'}, [
-      h('b', {text:'Fuera de la lista (' + extras.length + '): '}), unicos(extras).join(', ')
-    ]));
-  }, function(){
-    cajaGente.textContent = '';
-    cajaGente.appendChild(h('h3', {text:'Gente del viaje'}));
-    cajaGente.appendChild(h('p', {class:'muted', text:'No pudimos leerlo.'}));
-  });
+    var cargando = h('p', {class:'muted', text:'Leyendo…'});
+    cajaGente.appendChild(cargando);
+    var notaG = h('p', {class:'estado'});
+    Promise.all([cloudList('p_'), cloudList('r_')]).then(function(res){
+      var fichas = res[0].filter(function(f){ return f.value && f.value.name; });
+      var pedidos = res[1].filter(function(f){ return f.value && f.value.id; });
+      var nombres = fichas.map(function(f){ return f.value.name; });
+      var entraron = PEOPLE.filter(function(n){ return nombres.some(function(g){ return slug(g) === slug(n); }); });
+      var falta = PEOPLE.filter(function(n){ return !nombres.some(function(g){ return slug(g) === slug(n); }); });
+      cargando.remove();
+      cajaGente.appendChild(h('div', {class:'grande', text:entraron.length + ' de ' + TOTAL_GRUPO + ' ya entraron'}));
+      cajaGente.appendChild(h('p', {style:'font-size:13.5px;margin-top:9px'}, [
+        h('b', {text:'Faltan por entrar (' + falta.length + '): '}), falta.join(', ') || '—'
+      ]));
+      if(!fichas.length){
+        cajaGente.appendChild(h('p', {class:'muted', text:'Todavía no ha entrado nadie.'}));
+        return;
+      }
+      cajaGente.appendChild(h('hr', {class:'hilo'}));
+      cajaGente.appendChild(h('p', {class:'muted',
+        text:'Registrados (' + fichas.length + '). Borra los que estén mal escritos o repetidos; se van también sus pedidos.'}));
+      fichas.sort(function(a,b){ return slug(a.value.name) < slug(b.value.name) ? -1 : 1; });
+      fichas.forEach(function(f){
+        var enLista = PEOPLE.some(function(n){ return slug(n) === slug(f.value.name); });
+        var suyos = pedidos.filter(function(r){ return r.value.id === f.value.id; });
+        var item = h('div', {class:'ped-item'}, [
+          h('div', {class:'cab'}, [
+            h('span', {}, [
+              h('span', {class:'quien', text:f.value.name}),
+              enLista ? null : h('span', {class:'marca-dup', text:'fuera de la lista'})
+            ]),
+            h('span', {class:'cuando', text:cuandoTexto(f.value.at)})
+          ]),
+          h('div', {class:'qué', text: suyos.length
+            ? (suyos.length === 1 ? '1 pedido' : suyos.length + ' pedidos')
+            : 'sin pedidos'})
+        ]);
+        item.appendChild(h('button', {class:'btn carmin chico', onclick:function(){
+          var aviso = '¿Borrar a ' + f.value.name + ' de los registrados?';
+          if(suyos.length) aviso += '\n\nSe borran también sus ' +
+            (suyos.length === 1 ? '1 pedido' : suyos.length + ' pedidos') + '.';
+          aviso += '\n\nNo se puede deshacer.';
+          if(!confirm(aviso)) return;
+          notaG.className = 'estado'; notaG.textContent = 'Borrando…';
+          suyos.map(function(r){ return r.key; }).concat([f.key]).reduce(function(cadena, clave){
+            return cadena.then(function(){ return cloudDel(clave); });
+          }, Promise.resolve()).then(function(){
+            CACHE = {};
+            flash('✓ ' + f.value.name + ' quedó fuera de los registrados.');
+            pintarGente();
+          }, function(e){
+            notaG.className = 'estado err';
+            notaG.textContent = 'No se pudo borrar: ' + errTexto(e);
+          });
+        }}, 'Borrar a ' + f.value.name));
+        cajaGente.appendChild(item);
+      });
+      cajaGente.appendChild(notaG);
+    }, function(){
+      cargando.remove();
+      cajaGente.appendChild(h('p', {class:'muted', text:'No pudimos leerlo.'}));
+    });
+  }
+  pintarGente();
 }
 function registrados_completos(){
   return cloudList('p_').then(function(rows){
