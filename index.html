@@ -250,7 +250,7 @@ pre.diag{
    ========================================================= */
 var SB_URL = 'https://bylwleqgxonnnjynhqol.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bHdsZXFneG9ubm5qeW5ocW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDU5MzgsImV4cCI6MjEwNDAyMTkzOH0.vdeBQwykywU7sbI7_4LS9F9Nbj1wHs3u-txFHAuR6jM';
-var SEED = 8;
+var SEED = 9;
 var TOTAL_GRUPO = 30;
 var CLAVE_ORG = 'pisco';
 var TIMEOUT = 12000;
@@ -347,18 +347,38 @@ var MENUS_FIJOS = [
       ]}
     ]
   }
+  ,{
+    id:'chaska-ocupi', name:'Almuerzo en Chaska Ocupi', place:'Chaska Ocupi · Forest Glamping', incluye:'',
+    courses:[
+      {name:'Almuerzo', options:[
+        {n:'Lomo saltado',
+         d:'Lomo fino de res marinado en vino a nuestro estilo, salteado al wok, con crujientes papas huamantanga y arroz graneado'},
+        {n:'Saltado de pollo',
+         d:'Pechuga de pollo marinada al estilo Chaska Ocupi, con crujientes papas huamantanga y arroz graneado'},
+        {n:'Lomo a la plancha',
+         d:'Medallón de lomo fino a la plancha sobre una cremosa cama de trigoto del valle sagrado de los incas, bañado en salsa de hongos local'},
+        {n:'Trucha Pumahuanca',
+         d:'Filete de trucha a la plancha con un quinoto de las alturas de Chinchero'}
+      ]},
+      {name:'Postre', options:[
+        {n:'Frutas frescas', d:'Frutas del valle de Quillabamba bañadas con manjar de maíz morado'},
+        {n:'Helado artesanal', d:'Frutas del valle sagrado de los incas, bañadas con manjar de maíz morado'}
+      ]}
+    ]
+  }
 ];
 
 var SEMILLA = {
   seed: SEED,
-  open: ['mistura-cusco'],
+  open: ['mistura-cusco','chaska-ocupi'],
   closed: ['parquetito-turistico','almuerzo-cena-3tiempos','tres-opciones'],
   custom: [],
   meta: {
     'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:''},
     'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:''},
     'tres-opciones':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Cusco',                     close:''},
-    'mistura-cusco':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Mistura · Cusco',           close:'2026-09-05T10:00'}
+    'mistura-cusco':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Mistura · Cusco',           close:'2026-09-05T10:00'},
+    'chaska-ocupi':           {when:'Almuerzo · domingo 6 de septiembre', place:'Chaska Ocupi · Forest Glamping', close:''}
   }
 };
 
@@ -1541,7 +1561,7 @@ function vistaOrg(root){
               h('span', {}, [
                 h('span', {class:'quien', text:f.value.name}),
                 esElBueno ? null : h('span', {class:'marca-dup', text:'duplicado'}),
-                enLos29 ? null : h('span', {class:'marca-dup', text:'no está en los 29'})
+                enLos29 ? null : h('span', {class:'marca-dup', text:'no está en la lista'})
               ]),
               h('span', {class:'cuando', text:cuandoTexto(f.value.at)})
             ]),
