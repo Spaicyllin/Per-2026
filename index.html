@@ -719,6 +719,19 @@ function vistaMenu(root, menuId, conVolver){
   root.appendChild(h('div', {class:'meta', text:meta.when}));
   root.appendChild(h('div', {class:'meta', text:meta.place}));
   root.appendChild(h('div', {style:'margin-top:9px'}, [chipCierre(cms)]));
+
+  // Quién está pidiendo: visible SIEMPRE, antes de guardar.
+  root.appendChild(h('div', {style:'margin-top:12px;padding:10px 12px;background:#FBF6EA;border:1px solid rgba(36,28,20,.15);border-radius:10px;font-size:14px'}, [
+    h('span', {class:'muted', text:'Estás pidiendo como '}),
+    h('b', {text: YO ? YO.name : '—'}),
+    h('button', {class:'btn sec chico', style:'margin-top:8px', onclick:function(){
+      if(confirm('¿No eres ' + (YO ? YO.name : '') + '?\n\nVas a buscar tu nombre otra vez en la lista. Lo que hayas guardado con este nombre queda como está.')){
+        LS.del('mesa_me'); YO = null;
+        VISTA = { tab:'hoy', menu:null, grupo:null, pantalla:null, pasada:null };
+        render();
+      }
+    }}, 'No soy yo, cambiar')
+  ]));
   if(m.incluye) root.appendChild(h('div', {class:'aviso pino', text:m.incluye}));
 
   var picks = {}, nota = '';
@@ -1216,7 +1229,10 @@ function vistaAjustes(root){
     h('button', {class:'btn sec chico', onclick:function(){
       var n = prompt('Tu nombre:', YO ? YO.name : '');
       if(n && n.trim()){
-        YO.name = n.trim(); LS.set('mesa_me', YO);
+        // nombre distinto = persona distinta: id nuevo, para no pisar el pedido de otro
+        if(slug(n.trim()) !== slug(YO.name)) YO = { id: nuevoPersonaId(n.trim()), name: n.trim() };
+        else YO.name = n.trim();
+        LS.set('mesa_me', YO);
         cloudSet('p_' + limpiaClave(YO.id), {id:YO.id, name:YO.name, at:new Date().toISOString()}).catch(function(){});
         CACHE = {}; render();
       }
