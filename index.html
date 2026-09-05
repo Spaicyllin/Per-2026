@@ -1042,16 +1042,29 @@ function pintarGrupo(cuerpo, menuId, forzar){
     cuerpo.textContent = '';
 
     var conObs = pedidos.filter(function(p){ return p.note; });
+    // Cuenta personas de la lista, no pedidos: si alguien pidio con el nombre
+    // escrito distinto, no debe inflar el total ni desaparecer de los faltantes.
+    var fuera = pedidos.filter(function(p){
+      return !PEOPLE.some(function(n){ return slug(n) === slug(p.name); });
+    });
+    var enLista = pedidos.length - fuera.length;
     var cab = h('div', {class:'tarjeta'}, [
-      h('div', {class:'grande', text:pedidos.length + ' de ' + TOTAL_GRUPO + ' ya pidieron'}),
+      h('div', {class:'grande', text:enLista + ' de ' + TOTAL_GRUPO + ' ya pidieron'}),
       h('div', {class:'meta', text:m.name + ' · ' + metaDe(menuId).place}),
       h('div', {style:'margin:10px 0 4px;display:flex;gap:6px;flex-wrap:wrap'}, [
         conObs.length
           ? h('button', {class:'chip no', type:'button', 'aria-expanded':'false',
                          text: conObs.length + (conObs.length === 1 ? ' con observación ▾' : ' con observaciones ▾')})
           : h('span', {class:'chip gris', text:'sin observaciones'}),
-        h('span', {class:'chip gris', text:'faltan ' + falta.length})
-      ])
+        h('span', {class:'chip gris', text:'faltan ' + falta.length}),
+        fuera.length ? h('span', {class:'chip no', text:fuera.length + ' fuera de la lista'}) : null,
+        h('span', {class:'chip gris', text:pedidos.length + ' pedidos en total'})
+      ]),
+      fuera.length ? h('div', {class:'aviso', style:'margin-top:10px'},
+        [ h('b', {text:'Para revisar: '}),
+          h('span', {text:'pidieron con un nombre que no está en la lista de ' + TOTAL_GRUPO + ': ' +
+            fuera.map(function(p){ return p.name; }).join(' · ') +
+            '. Puede ser la misma persona escrita distinto.'}) ]) : null
     ]);
     if(conObs.length){
       var btnObs = cab.querySelector('button.chip');
