@@ -1385,8 +1385,17 @@ function vistaOrg(root){
     cajaOtro.appendChild(h('p', {class:'muted', text:'No hay comidas abiertas.'}));
   } else {
     var selMenu = h('select', {}, abiertas.map(function(m){ return h('option', {value:m.id}, m.name); }));
-    var dl = h('datalist', {id:'dl-gente'}, PEOPLE.map(function(n){ return h('option', {value:n}); }));
-    var iNom = h('input', {type:'text', list:'dl-gente', placeholder:'Nombre', autocomplete:'off'});
+    // Lista cerrada: escribir el nombre a mano dejaba pedidos que no calzaban
+    // con ninguno de los 29, y esa persona seguía contando como que faltaba.
+    var selNom = h('select', {},
+      [h('option', {value:''}, '— elegir persona —')]
+        .concat(PEOPLE.map(function(n){ return h('option', {value:n}, n); }))
+        .concat([h('option', {value:'__otra__'}, 'Otra persona (escribir)')]));
+    var iOtra = h('input', {type:'text', placeholder:'Nombre completo', autocomplete:'off', hidden:true});
+    selNom.addEventListener('change', function(){ iOtra.hidden = selNom.value !== '__otra__'; });
+    function nombreElegido(){
+      return selNom.value === '__otra__' ? iOtra.value.trim() : selNom.value;
+    }
     var zona = h('div');
     var iObs = h('textarea', {placeholder:'Observaciones (opcional)'});
     var notaOtro = h('p', {class:'estado'});
@@ -1403,12 +1412,13 @@ function vistaOrg(root){
     }
     selMenu.addEventListener('change', pintarTiempos);
     cajaOtro.appendChild(h('label', {class:'campo', text:'Comida'})); cajaOtro.appendChild(selMenu);
-    cajaOtro.appendChild(h('label', {class:'campo', text:'Nombre'})); cajaOtro.appendChild(iNom); cajaOtro.appendChild(dl);
+    cajaOtro.appendChild(h('label', {class:'campo', text:'Nombre'}));
+    cajaOtro.appendChild(selNom); cajaOtro.appendChild(iOtra);
     cajaOtro.appendChild(zona);
     cajaOtro.appendChild(h('label', {class:'campo', text:'Observaciones'})); cajaOtro.appendChild(iObs);
     cajaOtro.appendChild(h('button', {class:'btn chico', onclick:function(){
-      var nombre = iNom.value.trim();
-      if(!nombre){ notaOtro.className = 'estado err'; notaOtro.textContent = 'Falta el nombre.'; return; }
+      var nombre = nombreElegido();
+      if(!nombre){ notaOtro.className = 'estado err'; notaOtro.textContent = 'Falta elegir la persona.'; return; }
       var m = menuPorId(selMenu.value), picks = {};
       Array.prototype.forEach.call(zona.querySelectorAll('select'), function(s){
         if(s.value) picks[s.getAttribute('data-curso')] = s.value;
@@ -1432,7 +1442,8 @@ function vistaOrg(root){
       }).then(function(){
         CACHE = {};
         notaOtro.className = 'estado ok'; notaOtro.textContent = '✓ Pedido guardado para ' + nombre + '.';
-        iNom.value = ''; iObs.value = ''; pintarTiempos();
+        selNom.value = ''; iOtra.value = ''; iOtra.hidden = true;
+        iObs.value = ''; pintarTiempos();
       }, function(e){
         notaOtro.className = 'estado err'; notaOtro.textContent = 'No se pudo guardar: ' + errTexto(e);
       });
@@ -1474,17 +1485,68 @@ function vistaOrg(root){
         validas.sort(function(a,b){ return slug(a.value.name) < slug(b.value.name) ? -1 : 1; });
         validas.forEach(function(f){
           var esElBueno = mejor[slug(f.value.name)] === f;
+          var enLos29 = PEOPLE.some(function(n){ return slug(n) === slug(f.value.name); });
           var item = h('div', {class:'ped-item'}, [
             h('div', {class:'cab'}, [
               h('span', {}, [
                 h('span', {class:'quien', text:f.value.name}),
-                esElBueno ? null : h('span', {class:'marca-dup', text:'duplicado'})
+                esElBueno ? null : h('span', {class:'marca-dup', text:'duplicado'}),
+                enLos29 ? null : h('span', {class:'marca-dup', text:'no está en los 29'})
               ]),
               h('span', {class:'cuando', text:cuandoTexto(f.value.at)})
             ]),
             h('div', {class:'qué', text:platosDe(mm, f.value) || '(sin platos)'}),
             f.value.note ? h('div', {class:'obs', text:'“' + f.value.note + '”'}) : null
           ]);
+          // Reasignar: para los pedidos que quedaron con un nombre que no calza
+          // con ninguno de los 29. Conserva los platos y la observación.
+          var selDest = h('select', {},
+            [h('option', {value:''}, '— asignar a… —')]
+              .concat(PEOPLE.map(function(n){ return h('option', {value:n}, n); })));
+          var filaAsig = h('div', {class:'fila'}, [selDest]);
+          var btnAsig = h('button', {class:'btn sec chico', onclick:function(){
+            var destino = selDest.value;
+            if(!destino){ notaB.className='estado err'; notaB.textContent='Elige a quién asignárselo.'; return; }
+            if(slug(destino) === slug(f.value.name)){
+              notaB.className='estado err'; notaB.textContent='Ya está a nombre de esa persona.'; return;
+            }
+            if(!confirm('¿Pasar este pedido de «' + f.value.name + '» a «' + destino + '»?\n\n' +
+                        'Se conservan los platos y la observación.')) return;
+            notaB.className='estado'; notaB.textContent='Asignando…';
+            registrados_completos().then(function(gente){
+              var ya = gente.filter(function(g){ return slug(g.name) === slug(destino); })[0];
+              return ya ? ya.id : nuevoPersonaId(destino);
+            }, function(){ return nuevoPersonaId(destino); }).then(function(pid){
+              var movido = {id:pid, name:destino, menuId:mid, picks:f.value.picks,
+                            note:f.value.note || '', at:new Date().toISOString(),
+                            por:(YO ? YO.name : 'organizador')};
+              return cloudSet('p_' + limpiaClave(pid), {id:pid, name:destino, at:new Date().toISOString()})
+                .catch(function(){})
+                .then(function(){ return cloudSet(clavePedido(mid, pid), movido); })
+                .then(function(){ return cloudDel(f.key); })
+                .then(function(){
+                  // Si el nombre viejo no es de los 29 y ya no tiene pedidos, se va.
+                  var eraDeLaLista = PEOPLE.some(function(n){ return slug(n) === slug(f.value.name); });
+                  if(eraDeLaLista) return;
+                  return cloudList('r_').then(function(todos){
+                    var quedan = todos.filter(function(r){
+                      return r.value && r.value.id === f.value.id && r.key !== f.key;
+                    });
+                    if(quedan.length) return;
+                    return cloudDel('p_' + limpiaClave(f.value.id)).catch(function(){});
+                  }, function(){});
+                });
+            }).then(function(){
+              CACHE = {};
+              notaB.className='estado ok';
+              notaB.textContent='✓ El pedido quedó a nombre de ' + destino + '.';
+              pintarPedidos();
+            }, function(e){
+              notaB.className='estado err'; notaB.textContent='No se pudo asignar: ' + errTexto(e);
+            });
+          }}, 'Asignar');
+          filaAsig.appendChild(btnAsig);
+          item.appendChild(filaAsig);
           item.appendChild(h('button', {class:'btn carmin chico', onclick:function(){
             if(!confirm('¿Borrar el pedido de ' + f.value.name + ' en «' + mm.name + '»?\n\nNo se puede deshacer.')) return;
             notaB.className = 'estado'; notaB.textContent = 'Borrando…';
