@@ -130,6 +130,15 @@ ol.unoauno .t{color:rgba(36,28,20,.72);font-size:13.5px}
 ol.unoauno .obs{color:var(--carmin);font-size:13px}
 button.chip{cursor:pointer;background:none;font-family:inherit}
 button.chip[aria-expanded=true]{background:rgba(152,37,43,.12)}
+.ped-item{padding:11px 0;border-top:1px solid var(--linea)}
+.ped-item .cab{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ped-item .quien{font-weight:700;font-size:15px;color:var(--azul)}
+.ped-item .cuando{font-size:12px;color:rgba(36,28,20,.55);white-space:nowrap}
+.ped-item .qué{font-size:13px;color:rgba(36,28,20,.7);margin:3px 0}
+.ped-item .obs{font-size:12.5px;color:var(--carmin);font-style:italic}
+.ped-item .btn{margin-top:8px;padding:8px;font-size:13.5px}
+.marca-dup{display:inline-block;font-size:11px;font-weight:700;color:var(--carmin);
+  border:1px solid rgba(152,37,43,.5);border-radius:999px;padding:1px 7px;margin-left:6px}
 .obs-panel{border-top:1px solid var(--linea);margin-top:10px;padding-top:4px}
 .obs-item{padding:10px 0;border-bottom:1px dashed rgba(36,28,20,.16)}
 .obs-item:last-child{border-bottom:0}
@@ -1432,6 +1441,78 @@ function vistaOrg(root){
     pintarTiempos();
   }
   root.appendChild(cajaOtro);
+
+  // --- borrar un pedido ---
+  var cajaBorrar = h('div', {class:'tarjeta'}, [
+    h('h3', {text:'Borrar un pedido'}),
+    h('p', {class:'muted', text:'Para cuando alguien pidió por error o ya no viene. Borra solo ese pedido; la persona sigue registrada y puede volver a pedir.'})
+  ]);
+  var abiertasB = unicos(STATE.open.concat(STATE.closed)).map(menuPorId).filter(Boolean);
+  if(!abiertasB.length){
+    cajaBorrar.appendChild(h('p', {class:'muted', text:'No hay comidas todavía.'}));
+  } else {
+    var selB = h('select', {}, abiertasB.map(function(mm){ return h('option', {value:mm.id}, mm.name); }));
+    var listaB = h('div');
+    var notaB = h('p', {class:'estado'});
+    function pintarPedidos(){
+      var mid = selB.value, mm = menuPorId(mid);
+      listaB.textContent = '';
+      listaB.appendChild(h('div', {class:'cargando', text:'Leyendo…'}));
+      cloudList('r_' + limpiaClave(mid) + '__').then(function(filas){
+        listaB.textContent = '';
+        var validas = filas.filter(function(f){ return f.value && f.value.name; });
+        if(!validas.length){
+          listaB.appendChild(h('p', {class:'muted', text:'Nadie ha pedido en esta comida.'}));
+          return;
+        }
+        // Cuál gana por persona: el mismo criterio que usa el resto de la app.
+        var mejor = {};
+        validas.forEach(function(f){
+          var k = slug(f.value.name), previo = mejor[k];
+          if(!previo || String(f.value.at || '') > String(previo.value.at || '')) mejor[k] = f;
+        });
+        validas.sort(function(a,b){ return slug(a.value.name) < slug(b.value.name) ? -1 : 1; });
+        validas.forEach(function(f){
+          var esElBueno = mejor[slug(f.value.name)] === f;
+          var item = h('div', {class:'ped-item'}, [
+            h('div', {class:'cab'}, [
+              h('span', {}, [
+                h('span', {class:'quien', text:f.value.name}),
+                esElBueno ? null : h('span', {class:'marca-dup', text:'duplicado'})
+              ]),
+              h('span', {class:'cuando', text:cuandoTexto(f.value.at)})
+            ]),
+            h('div', {class:'qué', text:platosDe(mm, f.value) || '(sin platos)'}),
+            f.value.note ? h('div', {class:'obs', text:'“' + f.value.note + '”'}) : null
+          ]);
+          item.appendChild(h('button', {class:'btn carmin chico', onclick:function(){
+            if(!confirm('¿Borrar el pedido de ' + f.value.name + ' en «' + mm.name + '»?\n\nNo se puede deshacer.')) return;
+            notaB.className = 'estado'; notaB.textContent = 'Borrando…';
+            cloudDel(f.key).then(function(){
+              CACHE = {};
+              notaB.className = 'estado ok';
+              notaB.textContent = '✓ Borrado el pedido de ' + f.value.name + '.';
+              pintarPedidos();
+            }, function(e){
+              notaB.className = 'estado err';
+              notaB.textContent = 'No se pudo borrar: ' + errTexto(e);
+            });
+          }}, 'Borrar este pedido'));
+          listaB.appendChild(item);
+        });
+      }, function(e){
+        listaB.textContent = '';
+        listaB.appendChild(h('p', {class:'aviso', text:'No pudimos leer los pedidos: ' + errTexto(e)}));
+      });
+    }
+    selB.addEventListener('change', pintarPedidos);
+    cajaBorrar.appendChild(h('label', {class:'campo', text:'Comida'}));
+    cajaBorrar.appendChild(selB);
+    cajaBorrar.appendChild(listaB);
+    cajaBorrar.appendChild(notaB);
+    pintarPedidos();
+  }
+  root.appendChild(cajaBorrar);
 
   // --- cargar un menú nuevo ---
   var iNombre = h('input', {type:'text', placeholder:'Ej.: Almuerzo en Cusco'});
