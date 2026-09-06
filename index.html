@@ -250,7 +250,7 @@ pre.diag{
    ========================================================= */
 var SB_URL = 'https://bylwleqgxonnnjynhqol.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5bHdsZXFneG9ubm5qeW5ocW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDU5MzgsImV4cCI6MjEwNDAyMTkzOH0.vdeBQwykywU7sbI7_4LS9F9Nbj1wHs3u-txFHAuR6jM';
-var SEED = 9;
+var SEED = 10;
 var TOTAL_GRUPO = 30;
 var CLAVE_ORG = 'pisco';
 var TIMEOUT = 12000;
@@ -366,19 +366,48 @@ var MENUS_FIJOS = [
       ]}
     ]
   }
+  ,{
+    id:'almuerzo-lunes', name:'Almuerzo del lunes', place:'Por confirmar', incluye:'',
+    courses:[
+      {name:'Entrada', options:[
+        {n:'Causa de pollo', d:'Rellena de palta, tomate y pollo, con cremosa mayonesa y salsa huancaína'},
+        {n:'Ensalada orgánica', d:'Mix de hojas verdes, palta, vegetales baby, tomate cherry, pecanas y pasas rubias y negras, con vinagreta balsámica'}
+      ]},
+      {name:'Plato de fondo', options:[
+        {n:'Saltado de alpaca', d:'Con fettuccine a la huancaína y queso parmesano'},
+        {n:'Pollo al grill', d:'Con majado de papa con aromas de huacatay y salsa de hongos'}
+      ]}
+    ]
+  }
+  ,{
+    id:'cena-lunes', name:'Cena del lunes', place:'Por confirmar', incluye:'',
+    courses:[
+      {name:'Entrada', options:[
+        {n:'Crema de verduras de la huerta', d:'Vegetales cocidos lentamente (zucchini, brócoli, poro, apio, zapallo y zanahoria), con tostadas de la casa'},
+        {n:'Tiradito de trucha al ají amarillo', d:'Láminas de trucha marinadas en limón y salsa de ají amarillo, choclo y camote'}
+      ]},
+      {name:'Plato de fondo', options:[
+        {n:'Trucha a la plancha', d:'Con camote braseado, vegetales salteados y salsa menièr'},
+        {n:'Lasaña vegetariana', d:'Rellena de espinaca, zucchini, champiñones, berenjena, salsa de tomate y queso mozzarella'},
+        {n:'Curry de coliflor', d:'Con arroz y choclo'}
+      ]}
+    ]
+  }
 ];
 
 var SEMILLA = {
   seed: SEED,
-  open: ['mistura-cusco','chaska-ocupi'],
-  closed: ['parquetito-turistico','almuerzo-cena-3tiempos','tres-opciones'],
+  open: ['almuerzo-lunes','cena-lunes'],
+  closed: ['parquetito-turistico','almuerzo-cena-3tiempos','tres-opciones','mistura-cusco','chaska-ocupi'],
   custom: [],
   meta: {
     'parquetito-turistico':   {when:'Almuerzo · viernes 4 de septiembre', place:'El Parquetito',             close:''},
     'almuerzo-cena-3tiempos': {when:'Cena · viernes 4 de septiembre',     place:'Restaurante por confirmar', close:''},
     'tres-opciones':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Cusco',                     close:''},
     'mistura-cusco':          {when:'Almuerzo · sábado 5 de septiembre',  place:'Mistura · Cusco',           close:'2026-09-05T10:00'},
-    'chaska-ocupi':           {when:'Almuerzo · domingo 6 de septiembre', place:'Chaska Ocupi · Forest Glamping', close:''}
+    'chaska-ocupi':           {when:'Almuerzo · domingo 6 de septiembre', place:'Chaska Ocupi · Forest Glamping', close:''},
+    'almuerzo-lunes':         {when:'Almuerzo · lunes 7 de septiembre', place:'Por confirmar', close:''},
+    'cena-lunes':             {when:'Cena · lunes 7 de septiembre',     place:'Por confirmar', close:''}
   }
 };
 
